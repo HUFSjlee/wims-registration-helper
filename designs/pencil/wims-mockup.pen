@@ -1,0 +1,17 @@
+{
+  "version": "2.7",
+  "children": [
+    {
+      "type": "frame",
+      "id": "rootFrame",
+      "name": "WIMS Mockup Workspace",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 900,
+      "fill": "#F8FAFC",
+      "clip": true,
+      "layout": "none"
+    }
+  ]
+}

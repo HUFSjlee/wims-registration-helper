@@ -4,14 +4,1901 @@
     {
       "type": "frame",
       "id": "rootFrame",
-      "name": "WIMS Mockup Workspace",
       "x": 0,
       "y": 0,
+      "name": "WIMS Mockup Workspace",
+      "clip": true,
       "width": 1440,
       "height": 900,
       "fill": "#F8FAFC",
-      "clip": true,
       "layout": "none"
+    },
+    {
+      "type": "frame",
+      "id": "43viP",
+      "x": 40,
+      "y": 40,
+      "name": "01 로그인",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 24,
+      "children": [
+        {
+          "type": "text",
+          "id": "AWtob",
+          "name": "loginBadge",
+          "fill": "#2563EB",
+          "content": "WIMS Registration Helper",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "600"
+        },
+        {
+          "type": "text",
+          "id": "kGZAx",
+          "name": "loginTitle",
+          "fill": "#0F172A",
+          "content": "로그인",
+          "fontFamily": "Inter",
+          "fontSize": 28,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "zLgOe",
+          "name": "loginDesc",
+          "fill": "#475569",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "아이디/비밀번호 로그인 후 메인 화면으로 이동합니다.",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "RXaiD",
+          "name": "idLabel",
+          "fill": "#334155",
+          "content": "아이디",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "V0gvE",
+          "name": "idInput",
+          "width": "fill_container",
+          "height": 46,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "4BjoG",
+          "name": "idHint",
+          "fill": "#94A3B8",
+          "content": "example_user",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "40Vso",
+          "name": "pwLabel",
+          "fill": "#334155",
+          "content": "비밀번호",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "3dMVk",
+          "name": "pwInput",
+          "width": "fill_container",
+          "height": 46,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "VP9Cb",
+          "name": "pwHint",
+          "fill": "#94A3B8",
+          "content": "••••••••",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "N4xQU",
+          "name": "loginBtn",
+          "width": "fill_container",
+          "height": 48,
+          "fill": "#2563EB",
+          "cornerRadius": 12,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "4baJG",
+              "name": "loginBtnText",
+              "fill": "#FFFFFF",
+              "content": "로그인",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "lrWzQ",
+          "name": "loginError",
+          "fill": "#DC2626",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "로그인 실패 시: 아이디 또는 비밀번호가 올바르지 않습니다.",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "ohJVH",
+          "name": "signupCta",
+          "fill": "#2563EB",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "비회원이신가요? 회원가입 필요 → 회원가입 화면으로 이동",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "whu9h",
+      "x": 460,
+      "y": 40,
+      "name": "02 회원가입 유형 선택",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 16,
+      "padding": 24,
+      "children": [
+        {
+          "type": "text",
+          "id": "7AClv",
+          "name": "stepChip",
+          "fill": "#2563EB",
+          "content": "STEP 1/2",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "HKt8z",
+          "name": "selTitle",
+          "fill": "#0F172A",
+          "content": "회원가입 유형 선택",
+          "fontFamily": "Inter",
+          "fontSize": 26,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "S2nBu",
+          "name": "selDesc",
+          "fill": "#475569",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "개인 또는 사업자 중 1개를 선택하세요. 사업자는 추가 필수값이 있습니다.",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "BKHBW",
+          "name": "personCard",
+          "width": "fill_container",
+          "height": 140,
+          "fill": "#EFF6FF",
+          "cornerRadius": 14,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#93C5FD"
+          }
+        },
+        {
+          "type": "text",
+          "id": "HwWYG",
+          "name": "personTitle",
+          "fill": "#1E3A8A",
+          "content": "개인 가입",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "5lwl8",
+          "name": "personBody",
+          "fill": "#1E40AF",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "이름/아이디/비밀번호/전화번호/주소 입력",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "agCfW",
+          "name": "bizCard",
+          "width": "fill_container",
+          "height": 160,
+          "fill": "#FFF7ED",
+          "cornerRadius": 14,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#FDBA74"
+          }
+        },
+        {
+          "type": "text",
+          "id": "5Kh0L",
+          "name": "bizTitle",
+          "fill": "#9A3412",
+          "content": "사업자 가입",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "8jpqJ",
+          "name": "bizBody",
+          "fill": "#C2410C",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "공통 항목 + 사업자등록번호(필수)\n대표자명/상호명/사업장 주소(확장 가능)",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "c4UVT",
+          "name": "nextBtn",
+          "width": "fill_container",
+          "height": 48,
+          "fill": "#2563EB",
+          "cornerRadius": 12,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "HVEdL",
+              "name": "nextTxt",
+              "fill": "#FFFFFF",
+              "content": "선택 완료 후 가입 정보 입력",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "1h9V4",
+      "x": 880,
+      "y": 40,
+      "name": "03 회원가입(개인)",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 12,
+      "padding": 24,
+      "children": [
+        {
+          "type": "text",
+          "id": "1A1xt",
+          "name": "pStep",
+          "fill": "#2563EB",
+          "content": "STEP 2/2 · 개인 가입",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "TyWdE",
+          "name": "pTitle",
+          "fill": "#0F172A",
+          "content": "회원가입 정보 입력",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "LpYas",
+          "name": "pField1",
+          "fill": "#334155",
+          "content": "이름 *",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "vSOXO",
+          "name": "pIn1",
+          "width": "fill_container",
+          "height": 40,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "8XKhJ",
+          "name": "pField2",
+          "fill": "#334155",
+          "content": "아이디 * (중복 확인)",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "Iiv6D",
+          "name": "pIn2",
+          "width": "fill_container",
+          "height": 40,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "209N6",
+          "name": "pField3",
+          "fill": "#334155",
+          "content": "비밀번호 * (8자 이상, 영문+숫자)",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "iGVHJ",
+          "name": "pIn3",
+          "width": "fill_container",
+          "height": 40,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "SgowX",
+          "name": "pField4",
+          "fill": "#334155",
+          "content": "전화번호 *",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "ijg3q",
+          "name": "pIn4",
+          "width": "fill_container",
+          "height": 40,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "Mcu9u",
+          "name": "pPhoneErr",
+          "fill": "#DC2626",
+          "content": "형식 오류 예시: 010-1234-5678 형태로 입력해주세요.",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "QGIXy",
+          "name": "pField5",
+          "fill": "#334155",
+          "content": "주소 *",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "K824E",
+          "name": "pIn5",
+          "width": "fill_container",
+          "height": 52,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "frame",
+          "id": "bCFeP",
+          "name": "pSubmit",
+          "width": "fill_container",
+          "height": 46,
+          "fill": "#0EA5E9",
+          "cornerRadius": 12,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "lU9Kr",
+              "name": "pSubmitTxt",
+              "fill": "#FFFFFF",
+              "content": "가입 완료 → 로그인으로 이동",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "1MZcB",
+      "x": 1300,
+      "y": 40,
+      "name": "04 회원가입(사업자)",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 12,
+      "padding": 24,
+      "children": [
+        {
+          "type": "text",
+          "id": "TD7NZ",
+          "name": "bStep",
+          "fill": "#EA580C",
+          "content": "STEP 2/2 · 사업자 가입",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "D7uGt",
+          "name": "bTitle",
+          "fill": "#0F172A",
+          "content": "사업자 정보 포함 가입",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "Kn85n",
+          "name": "bCommon",
+          "fill": "#334155",
+          "content": "공통 필수: 이름/아이디/비밀번호/전화번호/주소",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "aWq2e",
+          "name": "bReq1",
+          "fill": "#B91C1C",
+          "content": "사업자등록번호 * (필수)",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "r3WFb",
+          "name": "bIn1",
+          "width": "fill_container",
+          "height": 40,
+          "fill": "#FFF7ED",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#FDBA74"
+          }
+        },
+        {
+          "type": "text",
+          "id": "vudH7",
+          "name": "bReq2",
+          "fill": "#334155",
+          "content": "대표자명 *",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "HKSpd",
+          "name": "bIn2",
+          "width": "fill_container",
+          "height": 40,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "mOqat",
+          "name": "bReq3",
+          "fill": "#334155",
+          "content": "상호명 *",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "7cAWF",
+          "name": "bIn3",
+          "width": "fill_container",
+          "height": 40,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "XOHYj",
+          "name": "bReq4",
+          "fill": "#334155",
+          "content": "사업장 주소 *",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "SWwCe",
+          "name": "bIn4",
+          "width": "fill_container",
+          "height": 50,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "EVhuz",
+          "name": "bGuard",
+          "fill": "#DC2626",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "사업자 추가 필수값 누락 시 가입 불가",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "jyiI1",
+          "name": "bSubmit",
+          "width": "fill_container",
+          "height": 46,
+          "fill": "#EA580C",
+          "cornerRadius": 12,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "UOyGE",
+              "name": "bSubmitTxt",
+              "fill": "#FFFFFF",
+              "content": "사업자 가입 완료",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "41Pie",
+      "x": 51,
+      "y": 908,
+      "name": "05 메인",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 14,
+      "padding": 20,
+      "children": [
+        {
+          "type": "frame",
+          "id": "uzYEk",
+          "name": "mainHeader",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "#F8FAFC",
+          "cornerRadius": 12,
+          "padding": 12,
+          "justifyContent": "space_between",
+          "alignItems": "center"
+        },
+        {
+          "type": "text",
+          "id": "czjKd",
+          "name": "mainTitle",
+          "fill": "#0F172A",
+          "content": "메인 대시보드",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "A99Eb",
+          "name": "profileBtn",
+          "width": 94,
+          "height": 32,
+          "fill": "#E2E8F0",
+          "cornerRadius": 16
+        },
+        {
+          "type": "text",
+          "id": "84C74",
+          "name": "profileTxt",
+          "fill": "#334155",
+          "content": "프로필",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "a2njf",
+          "name": "tabWrap",
+          "width": "fill_container",
+          "height": 52,
+          "fill": "#EFF6FF",
+          "cornerRadius": 12,
+          "gap": 8,
+          "padding": 8,
+          "children": [
+            {
+              "type": "frame",
+              "id": "CQG3c",
+              "name": "tab1",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#2563EB",
+              "cornerRadius": 8
+            },
+            {
+              "type": "frame",
+              "id": "z84rV",
+              "name": "tab2",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#DBEAFE",
+              "cornerRadius": 8
+            },
+            {
+              "type": "frame",
+              "id": "1lzmI",
+              "name": "tab3",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#DBEAFE",
+              "cornerRadius": 8
+            },
+            {
+              "type": "frame",
+              "id": "MuIvC",
+              "name": "tab4",
+              "width": "fill_container",
+              "height": "fill_container",
+              "fill": "#DBEAFE",
+              "cornerRadius": 8
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "j7h51",
+          "name": "tabText",
+          "fill": "#1E3A8A",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "양도 신청 | 양수 신청 | 증식 | 폐사",
+          "textAlign": "center",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "PeseE",
+          "name": "quickCard",
+          "width": "fill_container",
+          "height": 220,
+          "fill": "#F8FAFC",
+          "cornerRadius": 12,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#E2E8F0"
+          },
+          "layout": "vertical",
+          "gap": 8,
+          "padding": 14,
+          "children": [
+            {
+              "type": "text",
+              "id": "WwPau",
+              "name": "quickTitle",
+              "fill": "#0F172A",
+              "content": "빠른 진입",
+              "fontFamily": "Inter",
+              "fontSize": 15,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "9ubxQ",
+              "name": "quick1",
+              "fill": "#334155",
+              "content": "• 등록(보유/증식)",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "2gGQh",
+              "name": "quick2",
+              "fill": "#334155",
+              "content": "• 폐사",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "wLCzi",
+              "name": "quick3",
+              "fill": "#334155",
+              "content": "• 양도/양수 조회 및 접수",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "x0kKk",
+          "name": "mainHint",
+          "fill": "#475569",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "탭 클릭 시 각 기능 화면으로 이동",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Loxu0",
+      "x": 460,
+      "y": 920,
+      "name": "06 양도 신청",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 4,
+      "padding": 20,
+      "children": [
+        {
+          "type": "text",
+          "id": "aOOVC",
+          "name": "titleTr",
+          "fill": "#0F172A",
+          "content": "양도 신청 (양도자)",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "vsWhR",
+          "name": "sec1",
+          "fill": "#334155",
+          "content": "1) 양도자 정보 (자동 채움)",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "od82V",
+          "name": "trA",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "frame",
+          "id": "MBqq1",
+          "name": "trB",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "frame",
+          "id": "evcXf",
+          "name": "trC",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "5veCe",
+          "name": "sec2",
+          "fill": "#334155",
+          "content": "2) 개체 정보 선택/자동채움",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "WrqFz",
+          "name": "resultCard",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "#DBEAFE",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#93C5FD"
+          },
+          "padding": [
+            8,
+            10
+          ],
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "a0Ak2",
+              "name": "resultTxt",
+              "fill": "#1E3A8A",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "크레스티드 게코 (crested gecko) : 볏도마뱀붙이 (Correlophus ciliatus)",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "eXfJH",
+          "name": "searchHint",
+          "fill": "#1E40AF",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "한글/영문/학명으로 검색 가능",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "Xh8nR",
+          "name": "searchBar",
+          "width": "fill_container",
+          "height": 38,
+          "fill": "#EFF6FF",
+          "cornerRadius": 9,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#93C5FD"
+          }
+        },
+        {
+          "type": "frame",
+          "id": "NFZxP",
+          "name": "autoBox",
+          "width": "fill_container",
+          "height": 74,
+          "fill": "#F0F9FF",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#7DD3FC"
+          }
+        },
+        {
+          "type": "text",
+          "id": "1NcHE",
+          "name": "autoTxt",
+          "fill": "#0C4A6E",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "자동 채움 결과\n- 분류군: 볏도마뱀붙이\n- 학명: Correlophus ciliatus\n- 보통명(일반명): 크레스티드 게코",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "gWDkn",
+          "name": "qty",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#EEF2FF",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#A5B4FC"
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "I9eZT",
+              "name": "qtyHint",
+              "fill": "#3730A3",
+              "content": "수량 (직접 입력)",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "bf2H4",
+          "name": "purposeLabelT",
+          "fill": "#334155",
+          "content": "용도 (직접 입력)",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "SwhI6",
+          "name": "purposeInputT",
+          "width": "fill_container",
+          "height": 34,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "YwbR6",
+          "name": "reasonLabelT",
+          "fill": "#334155",
+          "content": "보관사유 (직접 입력)",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "600"
+        },
+        {
+          "type": "frame",
+          "id": "uV4ZJ",
+          "name": "reasonInputT",
+          "width": "fill_container",
+          "height": 42,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "FM0Np",
+          "name": "step3T",
+          "fill": "#334155",
+          "content": "3) 마지막 단계 · 양수인 전화번호 입력",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "9Xgal",
+          "name": "phoneInputT",
+          "width": "fill_container",
+          "height": 38,
+          "fill": "#FFF7ED",
+          "cornerRadius": 9,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#FDBA74"
+          }
+        },
+        {
+          "type": "text",
+          "id": "4t30X",
+          "name": "phoneErrT",
+          "fill": "#DC2626",
+          "content": "전화번호 확인 후 SMS 이어하기 링크 전송",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "w9hYL",
+          "name": "smsBtnT",
+          "width": "fill_container",
+          "height": 42,
+          "fill": "#2563EB",
+          "cornerRadius": 10,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "1fhcm",
+              "name": "smsTxtT",
+              "fill": "#FFFFFF",
+              "content": "SMS 이어하기 링크 전송",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "YpgHt",
+      "x": 880,
+      "y": 920,
+      "name": "07 양수 신청",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 6,
+      "padding": 20,
+      "children": [
+        {
+          "type": "text",
+          "id": "0veSo",
+          "name": "rTitle",
+          "fill": "#0F172A",
+          "content": "양수 신청 (링크 진입)",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "ImWpP",
+          "name": "rInfo",
+          "fill": "#334155",
+          "content": "1) 양수인 정보 입력 (비회원 목업: 직접 입력)",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "WgTDN",
+          "name": "rA",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "frame",
+          "id": "P17w8",
+          "name": "rB",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "frame",
+          "id": "Ots2P",
+          "name": "rC",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "79oZ2",
+          "name": "rSpecies",
+          "fill": "#334155",
+          "content": "2) 개체 정보 선택/자동채움",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "DnGKj",
+          "name": "rSearch",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "#DBEAFE",
+          "cornerRadius": 9,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#93C5FD"
+          },
+          "padding": [
+            8,
+            10
+          ],
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "xD2v2",
+              "name": "rResult",
+              "fill": "#1E3A8A",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "크레스티드 게코 (crested gecko) : 볏도마뱀붙이 (Correlophus ciliatus)",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "CfWCS",
+          "name": "rQty",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "Vjue1",
+              "name": "rcQtyTxt",
+              "fill": "#334155",
+              "content": "수량 (직접 입력)",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "jEuRB",
+          "name": "rPurpose",
+          "width": "fill_container",
+          "height": 36,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "mtfXQ",
+              "name": "rcPurposeTxt",
+              "fill": "#334155",
+              "content": "용도 (직접 입력)",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "UXjz5",
+          "name": "rReason",
+          "width": "fill_container",
+          "height": 42,
+          "fill": "#F8FAFC",
+          "cornerRadius": 8,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "2ZdaT",
+              "name": "rcReasonTxt",
+              "fill": "#334155",
+              "content": "보관사유 (직접 입력)",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "P55pY",
+          "name": "rFinal",
+          "fill": "#334155",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "자동 채움 결과: 분류군=볏도마뱀붙이, 학명=Correlophus ciliatus, 보통명=크레스티드 게코\n등록 완료 후 환경부(WIMS) 신청 페이지로 이동",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "MSwbr",
+          "name": "rPhone",
+          "width": "fill_container",
+          "height": 56,
+          "fill": "#ECFDF5",
+          "cornerRadius": 9,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#86EFAC"
+          },
+          "layout": "vertical",
+          "gap": 2,
+          "padding": [
+            8,
+            10
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "2yrsH",
+              "name": "notifyLine1",
+              "fill": "#166534",
+              "content": "양수자 정보 확인 완료",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "H2hs4",
+              "name": "notifyLine2",
+              "fill": "#15803D",
+              "content": "양도자에게 진행 알림 전송",
+              "fontFamily": "Inter",
+              "fontSize": 11,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "L4CdK",
+          "name": "rSms",
+          "width": "fill_container",
+          "height": 42,
+          "fill": "#2563EB",
+          "cornerRadius": 10,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "kLldx",
+              "name": "rSmsTxt",
+              "fill": "#FFFFFF",
+              "content": "환경부(WIMS) 신청 페이지로 이동",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "2JEOc",
+      "x": 1311,
+      "y": 908,
+      "name": "08 링크 발송 완료",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 12,
+      "padding": 20,
+      "children": [
+        {
+          "type": "text",
+          "id": "xx26v",
+          "name": "lsTitle",
+          "fill": "#0F172A",
+          "content": "링크 발송 완료",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "bkrNs",
+          "name": "lsOk",
+          "fill": "#166534",
+          "content": "상대방에게 SMS로 이어하기 링크를 전송했습니다.",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "sb8ml",
+          "name": "lsToken",
+          "width": "fill_container",
+          "height": 86,
+          "fill": "#ECFEFF",
+          "cornerRadius": 12,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#67E8F9"
+          },
+          "padding": 10
+        },
+        {
+          "type": "text",
+          "id": "5pzxY",
+          "name": "lsTokenTxt",
+          "fill": "#0E7490",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "토큰 링크 예시\n/r/TK_8cF2x7mQp9...\n※ URL에 개인정보는 포함되지 않음",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "f62nj",
+          "name": "lsExpire",
+          "fill": "#475569",
+          "content": "유효기간: 24시간",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "KKx3G",
+          "name": "lsCopy",
+          "width": "fill_container",
+          "height": 42,
+          "fill": "#0EA5E9",
+          "cornerRadius": 10,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Oqolp",
+              "name": "lsCopyTxt",
+              "fill": "#FFFFFF",
+              "content": "링크 복사",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "JLgkK",
+          "name": "lsTpl",
+          "width": "fill_container",
+          "height": 82,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          },
+          "padding": 10
+        },
+        {
+          "type": "text",
+          "id": "pJkeS",
+          "name": "lsTplTxt",
+          "fill": "#334155",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "공유 메시지 템플릿\n[WIMS] 이어하기 링크를 통해 신청을 완료해 주세요.",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "DybUg",
+          "name": "lsFail",
+          "fill": "#DC2626",
+          "content": "SMS 발송 실패 시: 재전송 버튼 노출",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "000PY",
+          "name": "lsRetry",
+          "width": "fill_container",
+          "height": 42,
+          "fill": "#E2E8F0",
+          "cornerRadius": 10,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "jL5K8",
+              "name": "lsRetryTxt",
+              "fill": "#334155",
+              "content": "재전송",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "eMsYG",
+      "x": 40,
+      "y": 1800,
+      "name": "09 링크 접속(개인정보 비노출)",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 12,
+      "padding": 20,
+      "children": [
+        {
+          "type": "text",
+          "id": "GkmzM",
+          "name": "rlTitle",
+          "fill": "#0F172A",
+          "content": "링크 접속 화면",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "H5LmA",
+          "name": "rlGate",
+          "width": "fill_container",
+          "height": 90,
+          "fill": "#FFF7ED",
+          "cornerRadius": 12,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#FDBA74"
+          },
+          "padding": 10
+        },
+        {
+          "type": "text",
+          "id": "uKCtx",
+          "name": "rlGateTxt",
+          "fill": "#9A3412",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "미로그인 상태\n로그인이 필요합니다. 로그인 후 원래 링크로 자동 복귀",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "fc9Wb",
+          "name": "rlLoginBtn",
+          "width": "fill_container",
+          "height": 40,
+          "fill": "#EA580C",
+          "cornerRadius": 10,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "VcHnE",
+              "name": "rlLoginTxt",
+              "fill": "#FFFFFF",
+              "content": "로그인하고 이어서 진행",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "Ej6ki",
+          "name": "rlPrivacy",
+          "fill": "#DC2626",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "개인정보 비노출 정책\n- 상대 이름/전화/주소/계정 정보는 표시하지 않음",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "Q8LoS",
+          "name": "rlSpecCard",
+          "width": "fill_container",
+          "height": 150,
+          "fill": "#F0F9FF",
+          "cornerRadius": 12,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#BAE6FD"
+          },
+          "padding": 12
+        },
+        {
+          "type": "text",
+          "id": "RhXzX",
+          "name": "rlSpecTxt",
+          "fill": "#0C4A6E",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "노출 허용 정보\n- 분류군: 도마뱀/게코류\n- 학명: Correlophus ciliatus\n- 보통명: 볏도마뱀붙이\n- 수량: 2",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "OlZfg",
+          "name": "rlCheck",
+          "width": "fill_container",
+          "height": 52,
+          "fill": "#F8FAFC",
+          "cornerRadius": 10,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#CBD5E1"
+          }
+        },
+        {
+          "type": "text",
+          "id": "sFlc7",
+          "name": "rlCheckTxt",
+          "fill": "#334155",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "[ ] 개체 정보를 확인했으며 신청을 이어서 진행합니다.",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "CZMvU",
+          "name": "rlConfirm",
+          "width": "fill_container",
+          "height": 42,
+          "fill": "#2563EB",
+          "cornerRadius": 10,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "fOFSw",
+              "name": "rlConfirmTxt",
+              "fill": "#FFFFFF",
+              "content": "접수 완료(확인)",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "uB2fF",
+      "x": 460,
+      "y": 1800,
+      "name": "10 링크 만료/무효",
+      "width": 380,
+      "height": 820,
+      "fill": "#FFFFFF",
+      "cornerRadius": 16,
+      "stroke": {
+        "thickness": 1,
+        "fill": "#E2E8F0"
+      },
+      "layout": "vertical",
+      "gap": 12,
+      "padding": 20,
+      "children": [
+        {
+          "type": "text",
+          "id": "t4Wtp",
+          "name": "errTitle",
+          "fill": "#0F172A",
+          "content": "링크 상태 안내",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "ofyto",
+          "name": "errCard",
+          "width": "fill_container",
+          "height": 170,
+          "fill": "#FEF2F2",
+          "cornerRadius": 12,
+          "stroke": {
+            "thickness": 1,
+            "fill": "#FCA5A5"
+          },
+          "padding": 14
+        },
+        {
+          "type": "text",
+          "id": "OMw56",
+          "name": "errTxt",
+          "fill": "#B91C1C",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "만료/무효/이미 사용된 링크입니다.\n- 유효기간 24시간 초과\n- 토큰 불일치\n- 이미 접수 완료",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "vSpJt",
+          "name": "errAction",
+          "fill": "#334155",
+          "content": "필요 시 양도/양수자에게 재전송 요청",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "Y1RAj",
+          "name": "resendBtn",
+          "width": "fill_container",
+          "height": 42,
+          "fill": "#2563EB",
+          "cornerRadius": 10,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "JekPE",
+              "name": "resendTxt",
+              "fill": "#FFFFFF",
+              "content": "재전송 요청",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lxhxf",
+          "name": "backBtn",
+          "width": "fill_container",
+          "height": 42,
+          "fill": "#E2E8F0",
+          "cornerRadius": 10,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "sDnXL",
+              "name": "backTxt",
+              "fill": "#334155",
+              "content": "로그인 화면으로",
+              "fontFamily": "Inter",
+              "fontSize": 13,
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "htIxr",
+          "name": "errSms",
+          "fill": "#DC2626",
+          "content": "SMS 발송 실패 시 재시도 가능",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        }
+      ]
     }
   ]
 }

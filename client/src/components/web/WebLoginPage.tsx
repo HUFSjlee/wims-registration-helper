@@ -5,8 +5,8 @@ export default function WebLoginPage() {
     <WebPage
       title="11 웹 로그인"
       headerLinks={[
-        { to: "/web/login", label: "로그인" },
-        { to: "/web/signup/personal", label: "회원가입" },
+        { href: "/web/login", label: "로그인" },
+        { href: "/web/signup/personal", label: "회원가입" },
       ]}
     >
       <div className="grid grid-cols-[1fr_460px] gap-5">

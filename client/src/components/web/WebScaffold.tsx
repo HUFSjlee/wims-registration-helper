@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import type { ReactNode } from "react";
 
-type HeaderLink = { to: string; label: string };
+type HeaderLink = { href: string; label: string };
 
 type WebPageProps = {
   title: string;
@@ -18,7 +18,7 @@ export function WebPage({ title, rightText, headerLinks, children }: WebPageProp
           <h1 className="text-2xl font-bold text-slate-900">{title}</h1>
           <div className="flex items-center gap-4 text-sm text-slate-600">
             {headerLinks?.map((item) => (
-              <Link key={item.to} to={item.to} className="hover:text-slate-900">
+              <Link key={item.href} href={item.href} className="hover:text-slate-900">
                 {item.label}
               </Link>
             ))}

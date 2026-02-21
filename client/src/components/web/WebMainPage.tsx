@@ -1,48 +1,51 @@
-import { Card, WebPage } from "./WebScaffold";
+"use client";
 
-function Tab({ label, active = false }: { label: string; active?: boolean }) {
-  return (
-    <button
-      type="button"
-      className={[
-        "flex h-10 w-full items-center justify-center rounded-lg text-sm font-bold",
-        active ? "bg-blue-700 text-white" : "bg-gray-200 text-slate-700",
-      ].join(" ")}
-    >
-      {label}
-    </button>
-  );
-}
+import Link from "next/link";
+import { WebPage, Card, Button } from "./WebScaffold";
+
+const tabs = [
+  { href: "/web/transfer", label: "양도 접수" },
+  { href: "/web/receive", label: "양수 접수" },
+  { href: "/web/register", label: "개체 등록" },
+  { href: "/web/death", label: "폐사 처리" },
+  { href: "/web/profile", label: "프로필" },
+];
 
 export default function WebMainPage() {
   return (
-    <WebPage title="16 웹 메인">
-      <div className="mb-3 flex justify-end">
-        <button type="button" className="h-9 rounded-full bg-gray-200 px-4 text-xs font-bold text-slate-700">
-          프로필
-        </button>
-      </div>
+    <WebPage
+      title="WIMS 등록 도우미"
+      headerLinks={[
+        { href: "/web/login", label: "로그아웃" },
+        { href: "/web/profile", label: "프로필" },
+      ]}
+    >
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+          {tabs.map((tab) => (
+            <Link key={tab.href} href={tab.href}>
+              <Button variant="outline" className="h-12">
+                {tab.label}
+              </Button>
+            </Link>
+          ))}
+        </div>
 
-      <div className="mb-3 grid grid-cols-4 gap-2 rounded-xl border border-gray-300 bg-gray-200 p-2">
-        <Tab label="양도 신청" active />
-        <Tab label="양수 신청" />
-        <Tab label="증식" />
-        <Tab label="폐사" />
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <Card className="min-h-[420px]">
-          <h3 className="mb-2 text-base font-bold text-slate-900">빠른 작업</h3>
-          <ul className="space-y-1 text-sm text-slate-600">
-            <li>• 등록(보유/증식)</li>
-            <li>• 폐사</li>
-            <li>• 양도/양수 조회 및 접수</li>
-          </ul>
-        </Card>
-        <Card className="min-h-[420px]">
-          <h3 className="mb-2 text-base font-bold text-slate-900">최근 진행 현황</h3>
-          <div className="h-[170px] rounded-lg border border-gray-300 bg-gray-50" />
-        </Card>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <h3 className="mb-2 text-base font-bold text-slate-800">빠른 작업</h3>
+            <ul className="space-y-1 text-sm text-slate-600">
+              <li>• 개체 등록 (보유/증식)</li>
+              <li>• 폐사 처리</li>
+              <li>• 양도 접수 (링크 전송)</li>
+              <li>• 양수 접수 (링크 진입)</li>
+            </ul>
+          </Card>
+          <Card>
+            <h3 className="mb-2 text-base font-bold text-slate-800">최근 진행 현황</h3>
+            <p className="text-sm text-slate-500">양도/양수 이력이 여기에 표시됩니다.</p>
+          </Card>
+        </div>
       </div>
     </WebPage>
   );

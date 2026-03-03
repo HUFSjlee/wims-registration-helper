@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { WebPage, Card, Button } from "./WebScaffold";
+import { AuthGuard } from "./AuthGuard";
+import { useMockAuth } from "../../contexts/MockAuthContext";
 
 const tabs = [
   { href: "/web/transfer", label: "양도 접수" },
@@ -12,41 +15,60 @@ const tabs = [
 ];
 
 export default function WebMainPage() {
-  return (
-    <WebPage
-      title="WIMS 등록 도우미"
-      headerLinks={[
-        { href: "/web/login", label: "로그아웃" },
-        { href: "/web/profile", label: "프로필" },
-      ]}
-    >
-      <div className="space-y-6">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-          {tabs.map((tab) => (
-            <Link key={tab.href} href={tab.href}>
-              <Button variant="outline" className="h-12">
-                {tab.label}
-              </Button>
-            </Link>
-          ))}
-        </div>
+  const router = useRouter();
+  const { user, logout } = useMockAuth();
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <h3 className="mb-2 text-base font-bold text-slate-800">빠른 작업</h3>
-            <ul className="space-y-1 text-sm text-slate-600">
-              <li>• 개체 등록 (보유/증식)</li>
-              <li>• 폐사 처리</li>
-              <li>• 양도 접수 (링크 전송)</li>
-              <li>• 양수 접수 (링크 진입)</li>
-            </ul>
-          </Card>
-          <Card>
-            <h3 className="mb-2 text-base font-bold text-slate-800">최근 진행 현황</h3>
-            <p className="text-sm text-slate-500">양도/양수 이력이 여기에 표시됩니다.</p>
-          </Card>
+  const handleLogout = () => {
+    logout();
+    router.push("/web/login");
+  };
+
+  return (
+    <AuthGuard>
+      <WebPage
+        title="WIMS 등록 도우미"
+        headerLinks={[
+          { href: "/web/profile", label: "프로필" },
+        ]}
+        rightText={user ? `${user.name}님` : undefined}
+      >
+        <div className="mb-4 flex justify-end">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-gray-50"
+          >
+            로그아웃
+          </button>
         </div>
-      </div>
-    </WebPage>
+        <div className="space-y-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+            {tabs.map((tab) => (
+              <Link key={tab.href} href={tab.href}>
+                <Button variant="outline" className="h-12">
+                  {tab.label}
+                </Button>
+              </Link>
+            ))}
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+              <h3 className="mb-2 text-base font-bold text-slate-800">빠른 작업</h3>
+              <ul className="space-y-1 text-sm text-slate-600">
+                <li>• 개체 등록 (보유/증식)</li>
+                <li>• 폐사 처리</li>
+                <li>• 양도 접수 (링크 전송)</li>
+                <li>• 양수 접수 (링크 진입)</li>
+              </ul>
+            </Card>
+            <Card>
+              <h3 className="mb-2 text-base font-bold text-slate-800">최근 진행 현황</h3>
+              <p className="text-sm text-slate-500">양도/양수 이력이 여기에 표시됩니다.</p>
+            </Card>
+          </div>
+        </div>
+      </WebPage>
+    </AuthGuard>
   );
 }

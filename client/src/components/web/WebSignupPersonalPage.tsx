@@ -1,15 +1,52 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { WebPage, Card, Input, Button } from "./WebScaffold";
+import { useMockAuth } from "../../contexts/MockAuthContext";
 
 export default function WebSignupPersonalPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { signup } = useMockAuth();
+  const [error, setError] = useState("");
+
+  const nextPath = searchParams.get("next") || "/web/main";
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem("name") as HTMLInputElement).value;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+    const passwordConfirm = (form.elements.namedItem("passwordConfirm") as HTMLInputElement).value;
+    const phone = (form.elements.namedItem("phone") as HTMLInputElement).value;
+
+    if (password !== passwordConfirm) {
+      setError("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    const user = {
+      id: `u_${Date.now()}`,
+      name,
+      email,
+      phone,
+      address: "(주소)",
+    };
+
+    signup(user, password);
+    router.push(nextPath);
+  };
+
   return (
     <WebPage
       title="개인 회원가입"
       headerLinks={[
-        { href: "/web/login", label: "로그인" },
-        { href: "/web/signup", label: "회원가입" },
+        { href: `/web/login?next=${encodeURIComponent(nextPath)}`, label: "로그인" },
+        { href: `/web/signup?next=${encodeURIComponent(nextPath)}`, label: "회원가입" },
       ]}
     >
       <div className="mx-auto grid max-w-4xl grid-cols-[1fr_420px] gap-6">
@@ -18,22 +55,26 @@ export default function WebSignupPersonalPage() {
           <p className="mt-2 text-sm text-slate-600">
             이름, 이메일, 비밀번호, 전화번호를 입력해 주세요. 자체 회원가입만 지원하며, 소셜 로그인(네이버, 카카오)은 제공하지 않습니다.
           </p>
+          <p className="mt-2 text-xs text-amber-700">[임시 테스트] 가입 후 기존 진행 화면으로 이동합니다.</p>
         </Card>
 
         <Card className="space-y-4">
           <h2 className="text-base font-bold text-slate-800">필수 정보 입력</h2>
-          <form className="space-y-3">
-            <Input label="이름" type="text" placeholder="홍길동" required />
-            <Input label="이메일" type="email" placeholder="example@email.com" required />
-            <Input label="비밀번호" type="password" placeholder="8자 이상" required />
-            <Input label="비밀번호 확인" type="password" placeholder="비밀번호 재입력" required />
-            <Input label="전화번호" type="tel" placeholder="010-0000-0000" required />
+          <form className="space-y-3" onSubmit={handleSubmit}>
+            <Input name="name" label="이름" type="text" placeholder="홍길동" required />
+            <Input name="email" label="이메일" type="email" placeholder="example@email.com" required />
+            <Input name="password" label="비밀번호" type="password" placeholder="8자 이상" required />
+            <Input name="passwordConfirm" label="비밀번호 확인" type="password" placeholder="비밀번호 재입력" required />
+            <Input name="phone" label="전화번호" type="tel" placeholder="010-0000-0000" required />
+            {error ? <p className="text-sm text-red-600">{error}</p> : null}
             <div className="pt-2">
-              <Button type="submit">가입 완료 → 로그인</Button>
+              <Button type="submit">가입 완료</Button>
             </div>
           </form>
           <p className="text-center text-sm text-slate-500">
-            <Link href="/web/login" className="text-blue-600 hover:underline">이미 계정이 있으신가요? 로그인</Link>
+            <Link href={`/web/login?next=${encodeURIComponent(nextPath)}`} className="text-blue-600 hover:underline">
+              이미 계정이 있으신가요? 로그인
+            </Link>
           </p>
         </Card>
       </div>

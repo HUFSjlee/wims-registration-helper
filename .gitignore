@@ -1,0 +1,50 @@
+# Environment and secret files
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Key/certificate materials
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_dsa
+
+# Spring local/override configs
+**/application-*.properties
+!**/application.properties
+**/application-*.yml
+!**/application.yml
+**/application-*.yaml
+!**/application.yaml
+
+# Logs, dumps, and local DBs
+*.log
+*.out
+*.err
+*.pid
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+
+# Node / Next.js artifacts
+**/node_modules/
+**/.next/
+**/dist/
+**/coverage/
+
+# Java / Gradle artifacts
+**/.gradle/
+**/build/
+*.class
+
+# IDE / OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

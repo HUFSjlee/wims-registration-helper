@@ -1,0 +1,22 @@
+* text=auto eol=lf
+
+# Keep Windows launcher scripts usable on Windows.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Treat common source/docs as text for stable diffs and merges.
+*.md text
+*.txt text
+*.json text
+*.yml text
+*.yaml text
+*.properties text
+*.xml text
+*.html text
+*.css text
+*.js text
+*.jsx text
+*.ts text
+*.tsx text
+*.java text
+*.gradle text

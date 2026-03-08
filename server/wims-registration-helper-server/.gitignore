@@ -40,3 +40,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Local Spring profile with secrets
+src/main/resources/application-local.yml

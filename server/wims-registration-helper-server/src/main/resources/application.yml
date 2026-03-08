@@ -2,31 +2,33 @@ spring:
   application:
     name: wims-registration-helper-server
 
+  profiles:
+    active: local
+
   datasource:
-    url: jdbc:h2:mem:wimsdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    # Keep real credentials out of this file.
+    # Put actual values in application-local.yml (gitignored).
+    url: jdbc:postgresql://YOUR_SUPABASE_HOST:5432/postgres?sslmode=require
+    driver-class-name: org.postgresql.Driver
+    username: YOUR_SUPABASE_DB_USER
+    password: YOUR_SUPABASE_DB_PASSWORD
 
   jpa:
     hibernate:
       ddl-auto: none
-    defer-datasource-initialization: true
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
   sql:
     init:
-      mode: always
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+      mode: never
 
 jwt:
-  secret: wims-registration-helper-secret-key-at-least-32bytes
+  secret: CHANGE_ME_TO_A_LONG_RANDOM_SECRET_KEY
   access-token-expiration-seconds: 3600
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO

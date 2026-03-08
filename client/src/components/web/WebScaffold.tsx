@@ -46,13 +46,16 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   error?: string;
 };
 
-export function Input({ label, error, className = "", ...props }: InputProps) {
+export function Input({ label, error, className = "", id, ...props }: InputProps) {
   return (
     <div className="space-y-1">
       {label ? (
-        <label className="block text-sm font-medium text-slate-700">{label}</label>
+        <label htmlFor={id} className="block text-sm font-medium text-slate-700">
+          {label}
+        </label>
       ) : null}
       <input
+        id={id}
         className={`h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm text-slate-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${error ? "border-red-500" : ""} ${className}`.trim()}
         {...props}
       />

@@ -1,5 +1,7 @@
 # WIMS ERD
 
+![WIMS ERD](./erd.png)
+
 ```mermaid
 erDiagram
     USERS ||--o{ ANIMAL_STOCKS : owns

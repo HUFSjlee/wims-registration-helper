@@ -1,7 +1,7 @@
 HELP.md
 # Sensitive planning/docs
 server-docs-prd.md
-docs/prd.md
+docs/server-docs/prd.md
 docs/*-prd.md
 
 .gradle

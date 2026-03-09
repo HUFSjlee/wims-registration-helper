@@ -39,7 +39,11 @@ public class AuthService {
       request.getName(),
       request.getEmail(),
       request.getPhone(),
-      request.getAddress(),
+      request.getAddress1(),
+      request.getAddress2(),
+      request.getAddress3(),
+      request.getBirth(),
+      request.getGender(),
       encodedPassword
     );
 

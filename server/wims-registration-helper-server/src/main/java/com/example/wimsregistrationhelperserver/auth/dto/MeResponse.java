@@ -13,7 +13,11 @@ public class MeResponse {
   private String name;
   private String email;
   private String phone;
-  private String address;
+  private String address1;
+  private String address2;
+  private String address3;
+  private String birth;
+  private String gender;
 
   public static MeResponse from(User user) {
     return MeResponse.builder()
@@ -22,7 +26,11 @@ public class MeResponse {
       .name(user.getName())
       .email(user.getEmail())
       .phone(user.getPhone())
-      .address(user.getAddress())
+      .address1(user.getAddress1())
+      .address2(user.getAddress2())
+      .address3(user.getAddress3())
+      .birth(user.getBirth())
+      .gender(user.getGender())
       .build();
   }
 }

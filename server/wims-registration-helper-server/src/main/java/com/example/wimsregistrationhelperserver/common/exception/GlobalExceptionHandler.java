@@ -44,4 +44,10 @@ public class GlobalExceptionHandler {
   public Map<String, String> handleConstraint(ConstraintViolationException e) {
     return Map.of("message", "입력값이 올바르지 않습니다.");
   }
+
+  @ExceptionHandler(BadRequestException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, String> handleBadRequest(BadRequestException e) {
+    return Map.of("message", e.getMessage());
+  }
 }

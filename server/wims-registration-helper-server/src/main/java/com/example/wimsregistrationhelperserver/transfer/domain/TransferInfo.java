@@ -76,4 +76,22 @@ public class TransferInfo {
     transferInfo.modifyDate = OffsetDateTime.now();
     return transferInfo;
   }
+
+  /**
+   * 상태 컬럼이 아직 없으므로 현재 단계에서는
+   * modify 필드를 완료 처리 시점 정보로 사용합니다.
+   */
+  public void completeBy(Long completedUserId) {
+    this.modifyId = completedUserId;
+    this.modifyDate = OffsetDateTime.now();
+  }
+
+  public boolean isCompleted() {
+    return modifyId != null
+      && transfereeId != null
+      && modifyId.equals(transfereeId)
+      && modifyDate != null
+      && registDate != null
+      && modifyDate.isAfter(registDate);
+  }
 }

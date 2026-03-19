@@ -26,6 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransferController {
   private final TransferService transferService;
 
+  //양도 접수 api가 제대로 동작하지 않아서 임시로 테스트 해보기 위해 만든 경로임, 추후 삭제
+  @PostMapping("/ping")
+  public String pingTransfer(Authentication authentication) {
+    Long loginUserId = (Long) authentication.getPrincipal();
+    return "transfer ok: " + loginUserId;
+  }
+
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public CreateTransferResponse createTransfer(
@@ -34,6 +41,14 @@ public class TransferController {
   ) {
     Long loginUserId = (Long) authentication.getPrincipal();
     return transferService.createTransfer(loginUserId, request);
+  }
+
+  /**
+   * 요청 본문이 컨트롤러까지 정상 전달되는지 확인하기 위한 임시 테스트 API입니다.
+   */
+  @PostMapping("/raw-test")
+  public String rawTest(@RequestBody String body) {
+    return body;
   }
 
   /**

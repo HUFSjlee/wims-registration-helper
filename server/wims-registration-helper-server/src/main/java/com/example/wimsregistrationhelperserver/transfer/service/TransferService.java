@@ -34,7 +34,7 @@ public class TransferService {
 
     // 현재 스키마에서는 transferee_id가 null일 수 없으므로
     // 양수자 전화번호로 가입된 사용자를 바로 찾아야 합니다.
-    User transferee = userRepository.findByPhone(request.getTransfereePhone())
+    User transferee = userRepository.findByPhone(request.transfereePhone())
       .orElseThrow(() -> new NotFoundException("양수자 전화번호에 해당하는 회원이 없습니다."));
 
     // 본인에게 양도 요청을 보내는 경우는 비즈니스상 허용하지 않습니다.
@@ -50,10 +50,10 @@ public class TransferService {
       transferKey,
       transferor.getId(),
       transferee.getId(),
-      request.getSpeciesId(),
-      request.getSpeciesQuantity(),
-      request.getScientificName(),
-      request.getCommonName()
+      request.speciesId(),
+      request.speciesQuantity(),
+      request.scientificName(),
+      request.commonName()
     );
 
     TransferInfo saved = transferInfoRepository.save(transferInfo);

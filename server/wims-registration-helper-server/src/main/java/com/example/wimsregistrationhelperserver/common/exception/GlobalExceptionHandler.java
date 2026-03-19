@@ -2,6 +2,7 @@ package com.example.wimsregistrationhelperserver.common.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -49,5 +50,14 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public Map<String, String> handleBadRequest(BadRequestException e) {
     return Map.of("message", e.getMessage());
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, String> handleMessageNotReadable(HttpMessageNotReadableException e) {
+    String detail = e.getMostSpecificCause() == null
+      ? "요청 본문을 읽을 수 없습니다."
+      : e.getMostSpecificCause().getMessage();
+    return Map.of("message", "요청 본문 파싱 실패: " + detail);
   }
 }

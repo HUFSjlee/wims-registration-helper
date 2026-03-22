@@ -9,14 +9,17 @@ import { useMockAuth } from "../../contexts/MockAuthContext";
 export default function WebSignupBusinessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { signup } = useMockAuth();
+  const { signup, login } = useMockAuth();
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const nextPath = searchParams.get("next") || "/web/main";
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
+
     const form = e.currentTarget;
     const name = (form.elements.namedItem("name") as HTMLInputElement).value;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
@@ -27,19 +30,31 @@ export default function WebSignupBusinessPage() {
 
     if (password !== passwordConfirm) {
       setError("비밀번호가 일치하지 않습니다.");
+      setIsSubmitting(false);
       return;
     }
 
-    const user = {
-      id: `u_${Date.now()}`,
-      name,
-      email,
-      phone,
-      address,
-    };
+    try {
+      await signup({
+        userType: "BUSINESS",
+        name,
+        email,
+        phone,
+        address1: address,
+        address2: "",
+        address3: "",
+        birth: "1900-01-01",
+        gender: "UNKNOWN",
+        password,
+      });
 
-    signup(user, password);
-    router.push(nextPath);
+      await login(email, password);
+      router.push(nextPath);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "회원가입에 실패했습니다.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -54,7 +69,7 @@ export default function WebSignupBusinessPage() {
         <Card className="bg-orange-50">
           <h2 className="text-lg font-bold text-orange-900">사업자 회원가입</h2>
           <p className="mt-2 text-sm text-orange-800">
-            개인 정보에 더해 사업자등록번호, 상호명, 대표자명, 사업장 주소를 입력해 주세요. 자체 회원가입만 지원합니다.
+            사업자용 회원가입을 실제 백엔드 Auth API와 연결합니다.
           </p>
         </Card>
 
@@ -66,18 +81,20 @@ export default function WebSignupBusinessPage() {
               <Input name="email" label="이메일" type="email" placeholder="example@email.com" required />
               <Input name="password" label="비밀번호" type="password" placeholder="8자 이상" required />
               <Input name="passwordConfirm" label="비밀번호 확인" type="password" placeholder="비밀번호 재입력" required />
-              <Input name="phone" label="전화번호" type="tel" placeholder="010-0000-0000" required />
+              <Input name="phone" label="전화번호" type="tel" placeholder="01012345678" required />
             </div>
             <h2 className="pt-2 text-base font-bold text-slate-800">사업자 정보</h2>
             <div className="space-y-3">
               <Input name="bizNo" label="사업자등록번호" type="text" placeholder="000-00-00000" required />
-              <Input name="bizName" label="상호명" type="text" placeholder="(주)회사명" required />
+              <Input name="bizName" label="상호명" type="text" placeholder="회사명" required />
               <Input name="ceoName" label="대표자명" type="text" placeholder="대표자 이름" required />
               <Input name="address" label="사업장 주소" type="text" placeholder="사업장 주소" required />
             </div>
             {error ? <p className="text-sm text-red-600">{error}</p> : null}
             <div className="pt-2">
-              <Button type="submit">사업자 가입 완료</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "가입 중..." : "사업자 가입 완료"}
+              </Button>
             </div>
           </form>
           <p className="text-center text-sm text-slate-500">

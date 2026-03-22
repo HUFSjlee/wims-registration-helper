@@ -1,48 +1,94 @@
 "use client";
 
-import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
-import type { MockUser } from "../lib/mock-auth";
 import {
-  getMockUser,
-  clearMockUser,
-  loginMockUser,
-  registerMockUser,
-} from "../lib/mock-auth";
+  clearToken,
+  getMe,
+  login as loginApi,
+  signup as signupApi,
+  type User,
+} from "../lib/api";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+
+type SignupPayload = {
+  userType: "PERSONAL" | "BUSINESS";
+  name: string;
+  email: string;
+  phone: string;
+  address1: string;
+  address2: string;
+  address3: string;
+  birth: string;
+  gender: string;
+  password: string;
+};
 
 type AuthContextValue = {
-  user: MockUser | null;
+  user: User | null;
   isLoading: boolean;
-  login: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  signup: (user: MockUser, password: string) => void;
+  signup: (payload: SignupPayload) => Promise<void>;
   isAuthenticated: boolean;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function MockAuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUserState] = useState<MockUser | null>(() => getMockUser());
+  const [user, setUserState] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = useCallback((email: string, password: string): boolean => {
-    const nextUser = loginMockUser(email, password);
-    if (!nextUser) return false;
-    setUserState(nextUser);
-    return true;
+  useEffect(() => {
+    let active = true;
+
+    async function bootstrap() {
+      try {
+        const me = await getMe();
+        if (active) {
+          setUserState(me);
+        }
+      } catch {
+        if (active) {
+          clearToken();
+          setUserState(null);
+        }
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    bootstrap();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
+    try {
+      await loginApi({ email, password });
+      const me = await getMe();
+      setUserState(me);
+      return true;
+    } catch {
+      clearToken();
+      setUserState(null);
+      return false;
+    }
   }, []);
 
   const logout = useCallback(() => {
-    clearMockUser();
+    clearToken();
     setUserState(null);
   }, []);
 
-  const signup = useCallback((newUser: MockUser, password: string): void => {
-    registerMockUser(newUser, password);
-    setUserState(newUser);
+  const signup = useCallback(async (payload: SignupPayload): Promise<void> => {
+    await signupApi(payload);
   }, []);
 
   const value: AuthContextValue = {
     user,
-    isLoading: false,
+    isLoading,
     login,
     logout,
     signup,

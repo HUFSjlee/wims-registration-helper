@@ -9,14 +9,17 @@ import { useMockAuth } from "../../contexts/MockAuthContext";
 export default function WebSignupPersonalPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { signup } = useMockAuth();
+  const { signup, login } = useMockAuth();
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const nextPath = searchParams.get("next") || "/web/main";
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
+
     const form = e.currentTarget;
     const name = (form.elements.namedItem("name") as HTMLInputElement).value;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
@@ -26,19 +29,31 @@ export default function WebSignupPersonalPage() {
 
     if (password !== passwordConfirm) {
       setError("비밀번호가 일치하지 않습니다.");
+      setIsSubmitting(false);
       return;
     }
 
-    const user = {
-      id: `u_${Date.now()}`,
-      name,
-      email,
-      phone,
-      address: "(주소)",
-    };
+    try {
+      await signup({
+        userType: "PERSONAL",
+        name,
+        email,
+        phone,
+        address1: "미입력",
+        address2: "",
+        address3: "",
+        birth: "1900-01-01",
+        gender: "UNKNOWN",
+        password,
+      });
 
-    signup(user, password);
-    router.push(nextPath);
+      await login(email, password);
+      router.push(nextPath);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "회원가입에 실패했습니다.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -53,9 +68,11 @@ export default function WebSignupPersonalPage() {
         <Card className="bg-slate-50">
           <h2 className="text-lg font-bold text-slate-800">개인 회원가입</h2>
           <p className="mt-2 text-sm text-slate-600">
-            이름, 이메일, 비밀번호, 전화번호를 입력해 주세요. 자체 회원가입만 지원하며, 소셜 로그인(네이버, 카카오)은 제공하지 않습니다.
+            이름, 이메일, 비밀번호, 전화번호를 입력해 회원가입합니다.
           </p>
-          <p className="mt-2 text-xs text-amber-700">[임시 테스트] 가입 후 기존 진행 화면으로 이동합니다.</p>
+          <p className="mt-2 text-xs text-amber-700">
+            주소, 생년월일, 성별은 현재 백엔드 연동을 위해 기본값으로 저장됩니다.
+          </p>
         </Card>
 
         <Card className="space-y-4">
@@ -65,15 +82,17 @@ export default function WebSignupPersonalPage() {
             <Input name="email" label="이메일" type="email" placeholder="example@email.com" required />
             <Input name="password" label="비밀번호" type="password" placeholder="8자 이상" required />
             <Input name="passwordConfirm" label="비밀번호 확인" type="password" placeholder="비밀번호 재입력" required />
-            <Input name="phone" label="전화번호" type="tel" placeholder="010-0000-0000" required />
+            <Input name="phone" label="전화번호" type="tel" placeholder="01012345678" required />
             {error ? <p className="text-sm text-red-600">{error}</p> : null}
             <div className="pt-2">
-              <Button type="submit">가입 완료</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "가입 중..." : "가입 완료"}
+              </Button>
             </div>
           </form>
           <p className="text-center text-sm text-slate-500">
             <Link href={`/web/login?next=${encodeURIComponent(nextPath)}`} className="text-blue-600 hover:underline">
-              이미 계정이 있으신가요? 로그인
+              이미 계정이 있으면 로그인
             </Link>
           </p>
         </Card>

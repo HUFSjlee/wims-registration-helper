@@ -140,55 +140,69 @@ export async function submitTransfer(tokenParam: string) {
   });
 }
 
-const API_BASE = "http://localhost:8080";
+export type RegisterSpeciesResult = {
+  logId: number;
+};
+
+/** 보유 순수량 = 등록(log 1) 합 − 폐사(log 2) 합 */
+export type SpeciesHolding = {
+  speciesId: number;
+  scientificName: string;
+  commonName: string;
+  quantity: number;
+};
+
+export async function getSpeciesHoldings() {
+  const token = getToken();
+  if (!token) {
+    throw new Error("로그인이 필요합니다.");
+  }
+  return request<SpeciesHolding[]>("/api/species/holdings", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export async function recordDeath(payload: {
+  speciesId: number;
+  quantity: string;
+}) {
+  const token = getToken();
+  if (!token) {
+    throw new Error("로그인이 필요합니다.");
+  }
+  return request<{ logId: number }>("/api/species/death", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      speciesId: payload.speciesId,
+      quantity: payload.quantity,
+    }),
+  });
+}
 
 export async function register(payload: {
   scientificName: string;
   commonName: string;
   quantity: string;
 }) {
-  const url = `${API_BASE}/lifecycle/register`;
-  const body = JSON.stringify({
-    scientificName: payload.scientificName,
-    commonName: payload.commonName,
-    quantity: payload.quantity,
-  });
-  const res = await fetch(url, {
+  const token = getToken();
+  if (!token) {
+    throw new Error("로그인이 필요합니다.");
+  }
+  return request<RegisterSpeciesResult>("/api/species/register", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      scientificName: payload.scientificName,
+      commonName: payload.commonName,
+      quantity: payload.quantity,
+    }),
   });
-  const responseText = await res.text();
-  console.log("[register] request:", { url, method: "POST", payload });
-  console.log("[register] response:", {
-    status: res.status,
-    statusText: res.statusText,
-    ok: res.ok,
-    body: responseText,
-  });
-  if (!res.ok) throw new Error("등록 요청에 실패했습니다.");
 }
 
-export async function remove(payload: {
-  userId: string;
-  speciesNo: string;
-  quantity: string;
-}) {
-  const url = `${API_BASE}/lifecycle/remove`;
-  const body = JSON.stringify(payload);
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body,
-  });
-  const responseText = await res.text();
-  console.log("[remove] request:", { url, method: "POST", payload });
-  console.log("[remove] response:", {
-    status: res.status,
-    statusText: res.statusText,
-    ok: res.ok,
-    body: responseText,
-  });
-  if (!res.ok) throw new Error("폐사 처리 요청에 실패했습니다.");
-  return responseText;
-}

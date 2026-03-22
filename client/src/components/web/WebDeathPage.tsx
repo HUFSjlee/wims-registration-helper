@@ -1,25 +1,49 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { WebPage, Card, Input, Button } from "./WebScaffold";
-import { remove as removeApi } from "../../lib/api";
-
-const MOCK_HOLDINGS = [
-  { id: "1", commonName: "크레스티드 게코", scientificName: "Correlophus ciliatus", quantity: 3 },
-  { id: "2", commonName: "레오파드 게코", scientificName: "Eublepharis macularius", quantity: 2 },
-];
+import {
+  getSpeciesHoldings,
+  recordDeath,
+  type SpeciesHolding,
+} from "../../lib/api";
 
 export default function WebDeathPage() {
-  const [selectedHolding, setSelectedHolding] = useState<typeof MOCK_HOLDINGS[0] | null>(null);
+  const [holdings, setHoldings] = useState<SpeciesHolding[]>([]);
+  const [holdingsLoading, setHoldingsLoading] = useState(true);
+  const [holdingsError, setHoldingsError] = useState<string | null>(null);
+
+  const [selectedHolding, setSelectedHolding] = useState<SpeciesHolding | null>(null);
   const [deathQuantity, setDeathQuantity] = useState("");
   const [showMaxQuantityModal, setShowMaxQuantityModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  const loadHoldings = useCallback(async () => {
+    setHoldingsLoading(true);
+    setHoldingsError(null);
+    try {
+      const list = await getSpeciesHoldings();
+      setHoldings(list);
+    } catch (e) {
+      console.error(e);
+      setHoldingsError(
+        e instanceof Error ? e.message : "보유 목록을 불러오지 못했습니다."
+      );
+      setHoldings([]);
+    } finally {
+      setHoldingsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadHoldings();
+  }, [loadHoldings]);
+
   useEffect(() => {
     setDeathQuantity("");
-  }, [selectedHolding?.id]);
+  }, [selectedHolding?.speciesId]);
 
   const maxQuantity = selectedHolding?.quantity ?? 0;
 
@@ -41,17 +65,16 @@ export default function WebDeathPage() {
     if (!quantity) return;
     setSubmitting(true);
     try {
-      const response = await removeApi({
-        userId: "1",
-        speciesNo: selectedHolding.id,
+      await recordDeath({
+        speciesId: selectedHolding.speciesId,
         quantity,
       });
-      console.log("[WebDeathPage] remove response:", response);
       setShowSuccessModal(true);
       setSelectedHolding(null);
       setDeathQuantity("");
+      await loadHoldings();
     } catch (err) {
-      console.error("[WebDeathPage] remove error:", err);
+      console.error("[WebDeathPage] recordDeath error:", err);
       setShowErrorModal(true);
     } finally {
       setSubmitting(false);
@@ -76,17 +99,30 @@ export default function WebDeathPage() {
 
         <Card className="space-y-4">
           <h2 className="text-base font-bold text-slate-800">보유 개체 선택 및 폐사 수량</h2>
+          {holdingsLoading && (
+            <p className="text-sm text-slate-500">보유 목록을 불러오는 중...</p>
+          )}
+          {holdingsError && (
+            <p className="text-sm text-red-600">{holdingsError}</p>
+          )}
+          {!holdingsLoading && !holdingsError && holdings.length === 0 && (
+            <p className="text-sm text-slate-600">
+              등록된 보유 개체가 없습니다. 먼저 개체 등록 후 이용해 주세요.
+            </p>
+          )}
           <div className="max-h-32 space-y-1 overflow-y-auto rounded border border-gray-200">
-            {MOCK_HOLDINGS.map((h) => (
+            {holdings.map((h) => (
               <button
-                key={h.id}
+                key={h.speciesId}
                 type="button"
                 onClick={() => setSelectedHolding(h)}
                 className={`flex w-full justify-between px-3 py-2 text-left text-sm hover:bg-slate-50 ${
-                  selectedHolding?.id === h.id ? "bg-blue-50 ring-1 ring-blue-200" : ""
+                  selectedHolding?.speciesId === h.speciesId ? "bg-blue-50 ring-1 ring-blue-200" : ""
                 }`}
               >
-                <span>{h.commonName} ({h.scientificName})</span>
+                <span>
+                  {h.commonName} ({h.scientificName})
+                </span>
                 <span className="text-slate-500">보유: {h.quantity}</span>
               </button>
             ))}
@@ -166,7 +202,7 @@ export default function WebDeathPage() {
                 </div>
               </div>
             )}
-            <Button type="submit" disabled={submitting}>
+            <Button type="submit" disabled={submitting || !selectedHolding}>
               {submitting ? "폐사 처리 중..." : "폐사 처리 완료"}
             </Button>
           </form>

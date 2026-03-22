@@ -6,12 +6,10 @@ spring:
     active: local
 
   datasource:
-    # Keep real credentials out of this file.
-    # Put actual values in application-local.yml (gitignored).
-    url: jdbc:postgresql://YOUR_SUPABASE_HOST:5432/postgres?sslmode=require
     driver-class-name: org.postgresql.Driver
-    username: YOUR_SUPABASE_DB_USER
-    password: YOUR_SUPABASE_DB_PASSWORD
+    # url / username / password: override in application-local.yml (gitignored)
+    url: jdbc:postgresql://localhost:5432/postgres?sslmode=require
+    username: postgres
 
   jpa:
     hibernate:
@@ -26,8 +24,8 @@ spring:
       mode: never
 
 jwt:
-  secret: CHANGE_ME_TO_A_LONG_RANDOM_SECRET_KEY
   access-token-expiration-seconds: 3600
+  # secret: set in application-local.yml (see application-local.yml.example)
 
 logging:
   level:

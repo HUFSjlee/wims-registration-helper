@@ -1,0 +1,14 @@
+# 이 파일을 복사해 application-local.yml 로 저장한 뒤 값을 채우세요.
+# application-local.yml 은 .gitignore 에 의해 커밋되지 않습니다.
+#
+#   copy application-local.yml.example application-local.yml   (Windows: Copy-Item)
+
+spring:
+  datasource:
+    url: jdbc:postgresql://YOUR_HOST:5432/postgres?sslmode=require
+    username: postgres
+    password: YOUR_DB_PASSWORD
+
+jwt:
+  # HS256 사용 시 충분히 긴 임의 문자열 (예: 32바이트 이상)
+  secret: YOUR_JWT_SECRET_REPLACE_WITH_LONG_RANDOM_STRING

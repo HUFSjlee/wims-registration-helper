@@ -1,3 +1,4 @@
+const API_BASE = "http://localhost:8080";
 const TOKEN_KEY = "wims_auth_token";
 const PENDING_REDIRECT_KEY = "wims_pending_redirect";
 
@@ -6,27 +7,79 @@ type ApiError = { message?: string; detail?: string };
 export type User = {
   id: string;
   name: string;
-  address: string;
+  email: string;
   phone: string;
+  address: string;
+  userType: string;
 };
 
-export type AuthResponse = {
-  token: string;
-  user: User;
+type LoginApiResponse = {
+  accessToken: string;
+  tokenType: string;
+  expiresIn: number;
+};
+
+type SignupApiPayload = {
+  userType: "PERSONAL" | "BUSINESS";
+  name: string;
+  email: string;
+  phone: string;
+  address1: string;
+  address2: string;
+  address3: string;
+  birth: string;
+  gender: string;
+  password: string;
+};
+
+type LoginApiPayload = {
+  email: string;
+  password: string;
 };
 
 export type Transfer = {
-  token: string;
-  transferorName: string;
-  transferorAddress: string;
-  transferorPhone: string;
-  receiverPhone: string;
-  receiverName?: string;
-  receiverAddress?: string;
-  status: "CREATED" | "SUBMITTED";
-  createdAt: string;
-  submittedAt?: string;
+  transferId?: number;
+  transferKey?: string;
+  transferLink?: string;
+  transferorId?: number;
+  transfereeId?: number;
+  speciesId?: number;
+  speciesQuantity?: number;
+  scientificName?: string;
+  commonName?: string;
+  transferorName?: string;
+  transferorPhone?: string;
+  maskedTransferorAddress?: string;
+  transfereeName?: string;
+  transfereePhone?: string;
+  completed?: boolean;
+  completedBy?: number;
+  completedAt?: string;
 };
+
+function buildAddress(address1: string, address2: string, address3: string) {
+  return [address1, address2, address3].filter(Boolean).join(" ");
+}
+
+function normalizeMeResponse(payload: {
+  id: number | string;
+  name: string;
+  email: string;
+  phone: string;
+  address1: string;
+  address2: string;
+  address3: string;
+  userType: string;
+}): User {
+  return {
+    id: String(payload.id),
+    name: payload.name,
+    email: payload.email,
+    phone: payload.phone,
+    address: buildAddress(payload.address1, payload.address2, payload.address3),
+    userType: payload.userType,
+  };
+}
 
 function getToken() {
   return localStorage.getItem(TOKEN_KEY);
@@ -52,8 +105,8 @@ export function takePendingRedirect() {
   return path;
 }
 
-async function request<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
-  const response = await fetch(input, init);
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`${API_BASE}${path}`, init);
   if (!response.ok) {
     let message = "요청 처리 중 오류가 발생했습니다.";
     try {
@@ -64,19 +117,14 @@ async function request<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
         message = payload.message;
       }
     } catch {
-      // ignore
+      // Ignore response parsing failure and use the default message.
     }
     throw new Error(message);
   }
   return response.json() as Promise<T>;
 }
 
-export async function signup(payload: {
-  id: string;
-  password: string;
-  address: string;
-  phone: string;
-}) {
+export async function signup(payload: SignupApiPayload) {
   return request<User>("/api/auth/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -84,13 +132,13 @@ export async function signup(payload: {
   });
 }
 
-export async function login(payload: { id: string; password: string }) {
-  const result = await request<AuthResponse>("/api/auth/login", {
+export async function login(payload: LoginApiPayload) {
+  const result = await request<LoginApiResponse>("/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-  setToken(result.token);
+  setToken(result.accessToken);
   return result;
 }
 
@@ -99,23 +147,42 @@ export async function getMe() {
   if (!token) {
     throw new Error("로그인이 필요합니다.");
   }
-  return request<User>("/api/auth/me", {
+
+  const payload = await request<{
+    id: number | string;
+    name: string;
+    email: string;
+    phone: string;
+    address1: string;
+    address2: string;
+    address3: string;
+    userType: string;
+  }>("/api/auth/me", {
     headers: { Authorization: `Bearer ${token}` },
   });
+
+  return normalizeMeResponse(payload);
 }
 
-export async function createTransfer(receiverPhone: string) {
+export async function createTransfer(payload: {
+  speciesId: number;
+  scientificName: string;
+  commonName: string;
+  speciesQuantity: number;
+  transfereePhone: string;
+}) {
   const token = getToken();
   if (!token) {
     throw new Error("로그인이 필요합니다.");
   }
+
   return request<Transfer>("/api/transfers", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ receiverPhone }),
+    body: JSON.stringify(payload),
   });
 }
 
@@ -124,6 +191,7 @@ export async function getTransfer(tokenParam: string) {
   if (!token) {
     throw new Error("로그인이 필요합니다.");
   }
+
   return request<Transfer>(`/api/transfers/${tokenParam}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -134,7 +202,8 @@ export async function submitTransfer(tokenParam: string) {
   if (!token) {
     throw new Error("로그인이 필요합니다.");
   }
-  return request<Transfer>(`/api/transfers/${tokenParam}/submit`, {
+
+  return request<Transfer>(`/api/transfers/${tokenParam}/complete`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -205,4 +274,3 @@ export async function register(payload: {
     }),
   });
 }
-

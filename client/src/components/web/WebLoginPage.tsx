@@ -11,20 +11,28 @@ export default function WebLoginPage() {
   const searchParams = useSearchParams();
   const { login } = useMockAuth();
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const nextPath = searchParams.get("next") || "/web/main";
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setIsSubmitting(true);
+
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
     const password = (form.elements.namedItem("password") as HTMLInputElement).value;
-    if (login(email, password)) {
+
+    const success = await login(email, password);
+
+    if (success) {
       router.push(nextPath);
     } else {
-      setError("이메일 또는 비밀번호가 올바르지 않습니다. 회원가입 후 로그인해 주세요.");
+      setError("이메일 또는 비밀번호가 올바르지 않습니다.");
     }
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -39,10 +47,7 @@ export default function WebLoginPage() {
         <Card className="bg-slate-50">
           <h2 className="text-lg font-bold text-slate-800">로그인</h2>
           <p className="mt-2 text-sm text-slate-600">
-            이메일과 비밀번호로 로그인합니다. 로그인 성공 시 기존 진행 화면으로 복귀합니다.
-          </p>
-          <p className="mt-2 text-xs text-amber-700">
-            [임시 테스트] 회원가입 후 동일한 이메일/비밀번호로 로그인하세요.
+            이메일과 비밀번호로 로그인합니다. 로그인 성공 시 기존 진행 화면으로 이동합니다.
           </p>
         </Card>
 
@@ -52,11 +57,13 @@ export default function WebLoginPage() {
             <Input name="email" label="이메일" type="email" placeholder="example@email.com" required />
             <Input name="password" label="비밀번호" type="password" placeholder="비밀번호" required />
             {error ? <p className="text-sm text-red-600">{error}</p> : null}
-            <Button type="submit">로그인</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "로그인 중..." : "로그인"}
+            </Button>
           </form>
           <p className="text-sm text-blue-700">
             <Link href={`/web/signup?next=${encodeURIComponent(nextPath)}`} className="hover:underline">
-              비회원은 회원가입으로 이동
+              회원가입으로 이동
             </Link>
           </p>
         </Card>

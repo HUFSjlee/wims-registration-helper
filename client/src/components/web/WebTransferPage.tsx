@@ -1,91 +1,119 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { WebPage, Card, Input, Button } from "./WebScaffold";
+import { useEffect, useMemo, useState } from "react";
 import { AuthGuard } from "./AuthGuard";
+import { Button, Card, Input, WebPage } from "./WebScaffold";
 import { useMockAuth } from "../../contexts/MockAuthContext";
-import {
-  getMockHoldings,
-  createMockTransfer,
-  type MockHolding,
-} from "../../lib/mock-auth";
+import { createTransfer, getSpeciesHoldings, type SpeciesHolding } from "../../lib/api";
 
-const COMMON_TO_SCIENTIFIC: Record<string, string> = {
-  "크레스티드게코": "Correlophus ciliatus",
-  "크레스티드 게코": "Correlophus ciliatus",
-  레오파드게코: "Eublepharis macularius",
-  "레오파드 게코": "Eublepharis macularius",
-  볼파이톤: "Python regius",
-  "볼 파이톤": "Python regius",
-};
+function buildReceiveLink(transferKey?: string) {
+  if (!transferKey || typeof window === "undefined") {
+    return "";
+  }
+  return `${window.location.origin}/web/receive/${transferKey}`;
+}
 
 export default function WebTransferPage() {
   const { user } = useMockAuth();
-  const [selected, setSelected] = useState<MockHolding | null>(null);
+  const [holdings, setHoldings] = useState<SpeciesHolding[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const [receiverPhone, setReceiverPhone] = useState("");
+  const [transfereePhone, setTransfereePhone] = useState("");
   const [message, setMessage] = useState("");
   const [generatedLink, setGeneratedLink] = useState("");
-  const [refreshTick, setRefreshTick] = useState(0);
 
-  const [commonNameInput, setCommonNameInput] = useState("");
-  const [lookupResult, setLookupResult] = useState("");
+  useEffect(() => {
+    let active = true;
 
-  const holdings: MockHolding[] = useMemo(() => {
-    if (!user) return [];
-    void refreshTick;
-    return getMockHoldings(user.id);
-  }, [user, refreshTick]);
+    async function loadHoldings() {
+      try {
+        const response = await getSpeciesHoldings();
+        if (active) {
+          setHoldings(response);
+        }
+      } catch (error) {
+        if (active) {
+          setMessage(error instanceof Error ? error.message : "보유 개체 목록을 불러오지 못했습니다.");
+        }
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadHoldings();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const selectedHolding = useMemo(() => {
+    if (selectedSpeciesId == null) {
+      return null;
+    }
+    return holdings.find((holding) => holding.speciesId === selectedSpeciesId) ?? null;
+  }, [holdings, selectedSpeciesId]);
 
   const encodedMessage = useMemo(() => {
-    if (!generatedLink) return "";
+    if (!generatedLink) {
+      return "";
+    }
     return encodeURIComponent(
       `WIMS 양수 접수 링크입니다.\n아래 링크로 접속해 주세요.\n${generatedLink}`
     );
   }, [generatedLink]);
 
-  const handleLookup = () => {
-    const key = commonNameInput.trim();
-    if (!key) {
-      setLookupResult("일반명을 입력해 주세요.");
-      return;
-    }
-    const scientific = COMMON_TO_SCIENTIFIC[key];
-    if (!scientific) {
-      setLookupResult("매핑된 학명이 없습니다. 개체 등록 시 직접 학명을 입력해 주세요.");
-      return;
-    }
-    setLookupResult(`${key} -> ${scientific}`);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setMessage("");
-    if (!user || !selected) {
-      setMessage("개체를 선택해 주세요.");
+
+    if (!selectedHolding) {
+      setMessage("양도할 개체를 먼저 선택해 주세요.");
       return;
     }
-    if (quantity < 1 || quantity > selected.quantity) {
-      setMessage(`수량은 1~${selected.quantity} 사이로 입력해 주세요.`);
+
+    if (quantity < 1 || quantity > selectedHolding.quantity) {
+      setMessage(`양도 수량은 1부터 ${selectedHolding.quantity}까지 입력할 수 있습니다.`);
       return;
     }
-    if (!receiverPhone.trim()) {
+
+    if (!transfereePhone.trim()) {
       setMessage("양수자 전화번호를 입력해 주세요.");
       return;
     }
 
-    const transfer = createMockTransfer(user, receiverPhone.trim(), selected, quantity);
-    const url = `${typeof window !== "undefined" ? window.location.origin : ""}/web/receive/${transfer.token}`;
-    setGeneratedLink(url);
-    void navigator.clipboard.writeText(url);
+    setIsSubmitting(true);
 
-    setMessage("링크를 생성했습니다. 아래 전송 버튼으로 문자 또는 공유 앱에서 전달해 주세요.");
-    setSelected(null);
-    setQuantity(1);
-    setRefreshTick((prev) => prev + 1);
+    try {
+      const transfer = await createTransfer({
+        speciesId: selectedHolding.speciesId,
+        scientificName: selectedHolding.scientificName,
+        commonName: selectedHolding.commonName,
+        speciesQuantity: quantity,
+        transfereePhone: transfereePhone.trim(),
+      });
+
+      const receiveLink = buildReceiveLink(transfer.transferKey);
+      setGeneratedLink(receiveLink);
+      setMessage("양도 요청이 생성되었습니다. 아래 링크를 양수자에게 전달해 주세요.");
+
+      if (receiveLink && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(receiveLink);
+      }
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "양도 요청 생성에 실패했습니다.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  if (!user) return null;
+  if (!user) {
+    return null;
+  }
 
   return (
     <AuthGuard>
@@ -98,7 +126,7 @@ export default function WebTransferPage() {
       >
         <div className="mx-auto grid max-w-5xl grid-cols-[360px_1fr] gap-6">
           <Card className="space-y-4 bg-slate-50">
-            <h3 className="text-sm font-bold text-slate-700">양도자 정보 (자동 채움)</h3>
+            <h3 className="text-sm font-bold text-slate-700">양도자 정보</h3>
             <div className="space-y-2 text-sm text-slate-600">
               <p>이름: {user.name}</p>
               <p>전화번호: {user.phone}</p>
@@ -109,79 +137,66 @@ export default function WebTransferPage() {
           <Card className="space-y-4">
             <h3 className="text-sm font-bold text-slate-700">양도할 개체 선택</h3>
             <p className="text-xs text-slate-500">
-              보유 개체 목록에서 선택하세요. 개체 등록 화면에서 먼저 등록할 수 있습니다.
+              현재 보유 중인 개체 목록에서 양도할 대상을 선택한 뒤, 양수자 전화번호를 입력합니다.
             </p>
 
-            <div className="space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
-              <p className="text-xs font-medium text-slate-700">일반명으로 학명 조회</p>
-              <div className="flex gap-2">
-                <Input
-                  label=""
-                  type="text"
-                  placeholder="예: 크레스티드게코"
-                  value={commonNameInput}
-                  onChange={(e) => setCommonNameInput(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={handleLookup}
-                  className="h-10 shrink-0 rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
-                >
-                  학명 조회
-                </button>
-              </div>
-              {lookupResult ? <p className="text-xs text-slate-600">{lookupResult}</p> : null}
-            </div>
-
-            <div className="max-h-32 space-y-1 overflow-y-auto rounded border border-gray-200">
-              {holdings.length === 0 ? (
-                <p className="px-3 py-2 text-sm text-slate-500">보유 개체가 없습니다. 개체 등록을 먼저 해 주세요.</p>
+            <div className="max-h-40 space-y-1 overflow-y-auto rounded border border-gray-200">
+              {isLoading ? (
+                <p className="px-3 py-2 text-sm text-slate-500">보유 개체 목록을 불러오는 중입니다.</p>
+              ) : holdings.length === 0 ? (
+                <p className="px-3 py-2 text-sm text-slate-500">보유 개체가 없습니다.</p>
               ) : (
-                holdings.map((h) => (
+                holdings.map((holding) => (
                   <button
-                    key={h.id}
+                    key={holding.speciesId}
                     type="button"
-                    onClick={() => setSelected(h)}
-                    className={`flex w-full justify-between px-3 py-2 text-left text-sm ${selected?.id === h.id ? "bg-blue-100" : "hover:bg-blue-50"}`}
+                    onClick={() => {
+                      setSelectedSpeciesId(holding.speciesId);
+                      setQuantity(1);
+                    }}
+                    className={`flex w-full justify-between px-3 py-2 text-left text-sm ${
+                      selectedSpeciesId === holding.speciesId ? "bg-blue-100" : "hover:bg-blue-50"
+                    }`}
                   >
                     <span>
-                      {h.commonName} ({h.scientificName})
+                      {holding.commonName} ({holding.scientificName})
                     </span>
-                    <span className="text-slate-500">x{h.quantity}</span>
+                    <span className="text-slate-500">x{holding.quantity}</span>
                   </button>
                 ))
               )}
             </div>
 
             <form className="space-y-3" onSubmit={handleSubmit}>
-              {selected && (
+              {selectedHolding ? (
                 <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
                   <p className="text-xs font-medium text-blue-900">선택된 개체</p>
                   <p className="text-sm text-blue-800">
-                    {selected.commonName} ({selected.scientificName})
+                    {selectedHolding.commonName} ({selectedHolding.scientificName})
                   </p>
                 </div>
-              )}
+              ) : null}
 
               <Input
                 label="양도 수량"
                 type="number"
                 min={1}
-                max={selected?.quantity ?? 1}
+                max={selectedHolding?.quantity ?? 1}
                 value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value) || 1)}
-                required
-              />
-              <Input
-                label="양수자 전화번호"
-                type="tel"
-                placeholder="010-0000-0000"
-                value={receiverPhone}
-                onChange={(e) => setReceiverPhone(e.target.value)}
+                onChange={(event) => setQuantity(Number(event.target.value) || 1)}
                 required
               />
 
-              {message ? <p className="text-sm text-green-600">{message}</p> : null}
+              <Input
+                label="양수자 전화번호"
+                type="tel"
+                placeholder="01012345678"
+                value={transfereePhone}
+                onChange={(event) => setTransfereePhone(event.target.value)}
+                required
+              />
+
+              {message ? <p className="text-sm text-slate-700">{message}</p> : null}
 
               {generatedLink ? (
                 <div className="space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
@@ -189,16 +204,16 @@ export default function WebTransferPage() {
                   <p className="break-all text-xs text-slate-600">{generatedLink}</p>
                   <div className="flex flex-wrap gap-2">
                     <a
-                      href={`sms:${receiverPhone.replace(/\s/g, "")}?body=${encodedMessage}`}
+                      href={`sms:${transfereePhone.replace(/\s/g, "")}?body=${encodedMessage}`}
                       className="inline-flex h-9 items-center rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
                     >
-                      문자(SMS) 전송
+                      문자 전송
                     </a>
                     <button
                       type="button"
                       onClick={async () => {
                         if (!navigator.share) {
-                          setMessage("현재 브라우저에서 공유 기능을 지원하지 않습니다. 문자 버튼을 이용해 주세요.");
+                          setMessage("현재 브라우저에서는 공유 기능을 지원하지 않습니다.");
                           return;
                         }
                         await navigator.share({
@@ -209,14 +224,14 @@ export default function WebTransferPage() {
                       }}
                       className="inline-flex h-9 items-center rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-100"
                     >
-                      카카오/앱 공유
+                      공유하기
                     </button>
                   </div>
                 </div>
               ) : null}
 
-              <Button type="submit" disabled={!selected || holdings.length === 0}>
-                링크 생성하기
+              <Button type="submit" disabled={isSubmitting || !selectedHolding || holdings.length === 0}>
+                {isSubmitting ? "전송 중..." : "전송하기"}
               </Button>
             </form>
           </Card>

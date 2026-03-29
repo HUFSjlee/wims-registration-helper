@@ -18,24 +18,11 @@ import java.util.List;
 public class SecurityConfig {
 
   @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(List.of("*"));
-    configuration.setAllowCredentials(true);
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
-
-  @Bean
   SecurityFilterChain securityFilterChain(
     HttpSecurity http,
     JwtAuthenticationFilter jwtAuthenticationFilter
   ) throws Exception {
     http
-      .cors(Customizer.withDefaults())
       .csrf(csrf -> csrf.disable())
       .cors(cors -> cors.configurationSource(corsConfigurationSource()))
       .formLogin(form -> form.disable())

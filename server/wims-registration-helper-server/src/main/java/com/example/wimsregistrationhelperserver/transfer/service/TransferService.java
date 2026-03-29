@@ -6,20 +6,19 @@ import com.example.wimsregistrationhelperserver.common.exception.BadRequestExcep
 import com.example.wimsregistrationhelperserver.common.exception.NotFoundException;
 import com.example.wimsregistrationhelperserver.common.exception.UnauthorizedException;
 import com.example.wimsregistrationhelperserver.transfer.domain.TransferInfo;
+import com.example.wimsregistrationhelperserver.transfer.dto.CompleteTransferResponse;
 import com.example.wimsregistrationhelperserver.transfer.dto.CreateTransferRequest;
 import com.example.wimsregistrationhelperserver.transfer.dto.CreateTransferResponse;
-import com.example.wimsregistrationhelperserver.transfer.dto.CompleteTransferResponse;
 import com.example.wimsregistrationhelperserver.transfer.dto.GetTransferDetailResponse;
+import com.example.wimsregistrationhelperserver.transfer.dto.TransferSummaryResponse;
 import com.example.wimsregistrationhelperserver.transfer.repository.TransferInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
-/**
- * 양도 요청 생성과 조회를 담당하는 서비스입니다.
- */
 @Service
 @RequiredArgsConstructor
 public class TransferService {
@@ -28,22 +27,16 @@ public class TransferService {
 
   @Transactional
   public CreateTransferResponse createTransfer(Long loginUserId, CreateTransferRequest request) {
-    // 로그인한 사용자가 실제 존재하는지 먼저 확인합니다.
     User transferor = userRepository.findById(loginUserId)
       .orElseThrow(() -> new NotFoundException("양도자를 찾을 수 없습니다."));
 
-    // 현재 스키마에서는 transferee_id가 null일 수 없으므로
-    // 양수자 전화번호로 가입된 사용자를 바로 찾아야 합니다.
     User transferee = userRepository.findByPhone(request.transfereePhone())
       .orElseThrow(() -> new NotFoundException("양수자 전화번호에 해당하는 회원이 없습니다."));
 
-    // 본인에게 양도 요청을 보내는 경우는 비즈니스상 허용하지 않습니다.
     if (transferor.getId().equals(transferee.getId())) {
       throw new BadRequestException("본인에게 양도 요청을 보낼 수 없습니다.");
     }
 
-    // species 도메인이 아직 완성되지 않았으므로 현재 단계에서는
-    // 개체 ID, 학명, 일반명, 수량을 요청값으로 그대로 받습니다.
     String transferKey = generateUniqueTransferKey();
 
     TransferInfo transferInfo = TransferInfo.create(
@@ -71,7 +64,6 @@ public class TransferService {
     User transferee = userRepository.findById(transferInfo.getTransfereeId())
       .orElseThrow(() -> new NotFoundException("양수자 정보를 찾을 수 없습니다."));
 
-    // 링크를 알아도 실제 양수자 본인이 아니면 상세 조회를 막습니다.
     if (!transferee.getId().equals(loginUserId)) {
       throw new UnauthorizedException("해당 양도 요청을 조회할 권한이 없습니다.");
     }
@@ -93,12 +85,29 @@ public class TransferService {
       .build();
   }
 
-  /**
-   * 양수자가 양도 요청을 최종 수락하는 메서드입니다.
-   *
-   * 현재 단계에서는 species 수량 반영과 로그 적재는 제외하고,
-   * 완료 여부만 검증한 뒤 완료 시점 정보를 업데이트합니다.
-   */
+  @Transactional(readOnly = true)
+  public List<TransferSummaryResponse> getMyTransfers(Long loginUserId) {
+    userRepository.findById(loginUserId)
+      .orElseThrow(() -> new NotFoundException("사용자 정보를 찾을 수 없습니다."));
+
+    return transferInfoRepository.findByTransferorIdOrTransfereeIdOrderByRegistDateDesc(loginUserId, loginUserId)
+      .stream()
+      .map(transferInfo -> TransferSummaryResponse.builder()
+        .transferId(transferInfo.getId())
+        .transferKey(transferInfo.getTransferKey())
+        .transferorId(transferInfo.getTransferorId())
+        .transfereeId(transferInfo.getTransfereeId())
+        .speciesId(transferInfo.getSpeciesId())
+        .speciesQuantity(transferInfo.getSpeciesQuantity())
+        .scientificName(transferInfo.getScientificName())
+        .commonName(transferInfo.getCommonName())
+        .completed(transferInfo.isCompleted())
+        .createdAt(transferInfo.getRegistDate())
+        .updatedAt(transferInfo.getModifyDate())
+        .build())
+      .toList();
+  }
+
   @Transactional
   public CompleteTransferResponse completeTransfer(Long loginUserId, String transferKey) {
     TransferInfo transferInfo = transferInfoRepository.findByTransferKey(transferKey)
@@ -126,9 +135,6 @@ public class TransferService {
       .build();
   }
 
-  /**
-   * 외부 공유용 키를 생성합니다.
-   */
   private String generateUniqueTransferKey() {
     String transferKey = UUID.randomUUID().toString().replace("-", "");
 
@@ -139,9 +145,6 @@ public class TransferService {
     return transferKey;
   }
 
-  /**
-   * PRD 요구사항에 맞춰 양도자 주소는 일부만 노출합니다.
-   */
   private String maskAddress(User user) {
     String address = user.getAddress1();
 

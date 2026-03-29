@@ -57,6 +57,20 @@ export type Transfer = {
   completedAt?: string;
 };
 
+export type TransferSummary = {
+  transferId: number;
+  transferKey: string;
+  transferorId: number;
+  transfereeId: number;
+  speciesId: number;
+  speciesQuantity: number;
+  scientificName: string;
+  commonName: string;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 function buildAddress(address1: string, address2: string, address3: string) {
   return [address1, address2, address3].filter(Boolean).join(" ");
 }
@@ -205,6 +219,17 @@ export async function submitTransfer(tokenParam: string) {
 
   return request<Transfer>(`/api/transfers/${tokenParam}/complete`, {
     method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export async function getMyTransfers() {
+  const token = getToken();
+  if (!token) {
+    throw new Error("濡쒓렇?몄씠 ?꾩슂?⑸땲??");
+  }
+
+  return request<TransferSummary[]>("/api/transfers", {
     headers: { Authorization: `Bearer ${token}` },
   });
 }

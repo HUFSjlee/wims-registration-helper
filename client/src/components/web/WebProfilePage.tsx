@@ -1,26 +1,55 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
-import { WebPage, Card, Button } from "./WebScaffold";
+import { useEffect, useState } from "react";
 import { AuthGuard } from "./AuthGuard";
+import { Button, Card, WebPage } from "./WebScaffold";
 import { useMockAuth } from "../../contexts/MockAuthContext";
-import { getMockHoldings, getMockTransfers } from "../../lib/mock-auth";
+import {
+  getMyTransfers,
+  getSpeciesHoldings,
+  type SpeciesHolding,
+  type TransferSummary,
+} from "../../lib/api";
 
 export default function WebProfilePage() {
   const { user } = useMockAuth();
+  const [holdings, setHoldings] = useState<SpeciesHolding[]>([]);
+  const [transfers, setTransfers] = useState<TransferSummary[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const holdings = useMemo(() => {
-    if (!user) return [];
-    return getMockHoldings(user.id);
-  }, [user]);
+  useEffect(() => {
+    let active = true;
 
-  const myTransfers = useMemo(() => {
-    if (!user) return [];
-    return getMockTransfers().filter(
-      (t) => t.transferorId === user.id || t.receiverPhone === user.phone
-    );
-  }, [user]);
+    async function loadProfileData() {
+      try {
+        const [holdingsResponse, transfersResponse] = await Promise.all([
+          getSpeciesHoldings(),
+          getMyTransfers(),
+        ]);
+
+        if (active) {
+          setHoldings(holdingsResponse);
+          setTransfers(transfersResponse);
+        }
+      } catch (fetchError) {
+        if (active) {
+          setError(fetchError instanceof Error ? fetchError.message : "프로필 정보를 불러오지 못했습니다.");
+        }
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadProfileData();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <AuthGuard>
@@ -44,7 +73,7 @@ export default function WebProfilePage() {
 
           <Card>
             <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-base font-bold text-slate-800">보유 개체 목록</h2>
+              <h2 className="text-base font-bold text-slate-800">보유 개체 현황</h2>
               <Link href="/web/register">
                 <Button variant="secondary" className="h-9 w-auto px-4">
                   + 개체 등록
@@ -52,18 +81,22 @@ export default function WebProfilePage() {
               </Link>
             </div>
             <div className="space-y-2 text-sm">
-              {holdings.length === 0 ? (
+              {isLoading ? (
+                <p className="text-slate-500">보유 개체 현황을 불러오는 중입니다.</p>
+              ) : error ? (
+                <p className="text-red-600">{error}</p>
+              ) : holdings.length === 0 ? (
                 <p className="text-slate-500">보유 개체가 없습니다.</p>
               ) : (
-                holdings.map((h) => (
+                holdings.map((holding) => (
                   <div
-                    key={h.id}
+                    key={holding.speciesId}
                     className="flex justify-between rounded border border-gray-200 px-3 py-2"
                   >
                     <span>
-                      {h.commonName} ({h.scientificName})
+                      {holding.commonName} ({holding.scientificName})
                     </span>
-                    <span className="font-medium">{h.quantity}마리</span>
+                    <span className="font-medium">{holding.quantity}마리</span>
                   </div>
                 ))
               )}
@@ -73,20 +106,31 @@ export default function WebProfilePage() {
           <Card>
             <h2 className="mb-3 text-base font-bold text-slate-800">양도/양수 이력</h2>
             <div className="space-y-2 text-sm">
-              {myTransfers.length === 0 ? (
+              {isLoading ? (
+                <p className="text-slate-500">양도/양수 이력을 불러오는 중입니다.</p>
+              ) : error ? (
+                <p className="text-red-600">{error}</p>
+              ) : transfers.length === 0 ? (
                 <p className="text-slate-500">양도/양수 이력이 없습니다.</p>
               ) : (
-                myTransfers.map((t) => (
-                  <div key={t.id} className="rounded border border-gray-200 px-3 py-2">
-                    <p>
-                      {t.commonName} x {t.quantity} -{" "}
-                      {t.status === "PENDING" ? "대기" : "완료"}
-                    </p>
-                    <p className="text-xs text-slate-500">
-                      {t.transferorName} {"->"} {t.receiverPhone}
-                    </p>
-                  </div>
-                ))
+                transfers.map((transfer) => {
+                  const isTransferOut = String(transfer.transferorId) === user?.id;
+
+                  return (
+                    <div
+                      key={transfer.transferId}
+                      className="rounded border border-gray-200 px-3 py-2"
+                    >
+                      <p>
+                        [{isTransferOut ? "양도" : "양수"}] {transfer.commonName} ({transfer.scientificName}) x{" "}
+                        {transfer.speciesQuantity}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        상태: {transfer.completed ? "완료" : "대기"} / 키: {transfer.transferKey}
+                      </p>
+                    </div>
+                  );
+                })
               )}
             </div>
           </Card>

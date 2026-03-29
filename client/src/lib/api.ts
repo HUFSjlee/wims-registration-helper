@@ -213,7 +213,26 @@ export type RegisterSpeciesResult = {
   logId: number;
 };
 
-/** 보유 순수량 = 등록(log 1) 합 − 폐사(log 2) 합 */
+export type ScientificNameByCommonNameResult = {
+  scientificName: string;
+};
+
+/** species_info.common_name 일치 시 학명, 없으면 scientificName 빈 문자열 */
+export async function getScientificNameByCommonName(commonName: string) {
+  const token = getToken();
+  if (!token) {
+    throw new Error("로그인이 필요합니다.");
+  }
+  const q = encodeURIComponent(commonName.trim());
+  return request<ScientificNameByCommonNameResult>(
+    `/api/species/scientific-name-by-common-name?commonName=${q}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+}
+
+/** 보유 순수량 = 등록(log R) 합 − 폐사(log D) 합 */
 export type SpeciesHolding = {
   speciesId: number;
   scientificName: string;

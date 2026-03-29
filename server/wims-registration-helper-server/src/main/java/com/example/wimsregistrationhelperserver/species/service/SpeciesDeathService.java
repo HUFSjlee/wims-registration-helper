@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 보유 개체 조회(등록 − 폐사) 및 폐사 로그({@code log_type = 2}) 기록.
+ * 보유 개체 조회(등록 − 폐사) 및 폐사 로그({@code log_type = D}) 기록.
  */
 @Service
 @RequiredArgsConstructor

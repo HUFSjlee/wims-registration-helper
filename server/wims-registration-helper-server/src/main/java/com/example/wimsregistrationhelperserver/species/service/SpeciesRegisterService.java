@@ -5,6 +5,7 @@ import com.example.wimsregistrationhelperserver.species.domain.SpeciesInfo;
 import com.example.wimsregistrationhelperserver.species.domain.SpeciesStatusInfo;
 import com.example.wimsregistrationhelperserver.species.dto.RegisterSpeciesRequest;
 import com.example.wimsregistrationhelperserver.species.dto.RegisterSpeciesResponse;
+import com.example.wimsregistrationhelperserver.species.dto.ScientificNameByCommonNameResponse;
 import com.example.wimsregistrationhelperserver.species.repository.SpeciesInfoRepository;
 import com.example.wimsregistrationhelperserver.species.repository.SpeciesStatusInfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,17 @@ public class SpeciesRegisterService {
 
   private final SpeciesInfoRepository speciesInfoRepository;
   private final SpeciesStatusInfoRepository speciesStatusInfoRepository;
+
+  @Transactional(readOnly = true)
+  public ScientificNameByCommonNameResponse lookupScientificNameByCommonName(String commonName) {
+    if (!StringUtils.hasText(commonName)) {
+      return new ScientificNameByCommonNameResponse("");
+    }
+    return speciesInfoRepository
+      .findFirstByCommonNameIgnoringWhitespace(commonName.trim())
+      .map(s -> new ScientificNameByCommonNameResponse(s.getScientificName()))
+      .orElse(new ScientificNameByCommonNameResponse(""));
+  }
 
   @Transactional
   public RegisterSpeciesResponse register(Long loginUserId, RegisterSpeciesRequest request) {
@@ -67,7 +79,7 @@ public class SpeciesRegisterService {
       }
     }
     if (StringUtils.hasText(commonName)) {
-      var byCom = speciesInfoRepository.findFirstByCommonNameIgnoreCase(commonName);
+      var byCom = speciesInfoRepository.findFirstByCommonNameIgnoringWhitespace(commonName);
       if (byCom.isPresent()) {
         return byCom.get();
       }

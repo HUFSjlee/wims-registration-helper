@@ -11,7 +11,7 @@ import java.util.List;
 public interface SpeciesStatusInfoRepository extends JpaRepository<SpeciesStatusInfo, Long> {
 
   /**
-   * 사용자 ID·종 ID 기준으로 그룹화하여, log_type 1은 더하고 2는 뺀 순수량이 0보다 큰 행만 반환합니다.
+   * 사용자 ID·종 ID 기준으로 그룹화하여, log_type R은 더하고 D는 뺀 순수량이 0보다 큰 행만 반환합니다.
    */
   @Query(
     """
@@ -19,15 +19,15 @@ public interface SpeciesStatusInfoRepository extends JpaRepository<SpeciesStatus
       s.speciesId,
       MAX(i.scientificName),
       MAX(i.commonName),
-      COALESCE(SUM(CASE WHEN s.logType = '1' THEN s.speciesQuantity ELSE 0L END), 0L)
-        - COALESCE(SUM(CASE WHEN s.logType = '2' THEN s.speciesQuantity ELSE 0L END), 0L)
+      COALESCE(SUM(CASE WHEN s.logType = 'R' THEN s.speciesQuantity ELSE 0L END), 0L)
+        - COALESCE(SUM(CASE WHEN s.logType = 'D' THEN s.speciesQuantity ELSE 0L END), 0L)
     )
     FROM SpeciesStatusInfo s
     JOIN SpeciesInfo i ON i.id = s.speciesId
     WHERE s.userId = :userId
     GROUP BY s.speciesId
-    HAVING COALESCE(SUM(CASE WHEN s.logType = '1' THEN s.speciesQuantity ELSE 0L END), 0L)
-         - COALESCE(SUM(CASE WHEN s.logType = '2' THEN s.speciesQuantity ELSE 0L END), 0L) > 0
+    HAVING COALESCE(SUM(CASE WHEN s.logType = 'R' THEN s.speciesQuantity ELSE 0L END), 0L)
+         - COALESCE(SUM(CASE WHEN s.logType = 'D' THEN s.speciesQuantity ELSE 0L END), 0L) > 0
     ORDER BY MAX(i.commonName) ASC
     """
   )
@@ -40,8 +40,8 @@ public interface SpeciesStatusInfoRepository extends JpaRepository<SpeciesStatus
     """
     SELECT COALESCE(SUM(
       CASE
-        WHEN s.logType = '1' THEN s.speciesQuantity
-        WHEN s.logType = '2' THEN -s.speciesQuantity
+        WHEN s.logType = 'R' THEN s.speciesQuantity
+        WHEN s.logType = 'D' THEN -s.speciesQuantity
         ELSE 0L
       END
     ), 0L)

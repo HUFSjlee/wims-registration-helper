@@ -20,11 +20,11 @@ import java.time.OffsetDateTime;
 @Table(name = "species_status_info")
 public class SpeciesStatusInfo {
 
-  /** 등록 시 {@code "1"} */
-  public static final String LOG_TYPE_REGISTER = "1";
+  /** 등록 시 */
+  public static final String LOG_TYPE_REGISTER = "R";
 
-  /** 폐사(삭제) 시 {@code "2"} */
-  public static final String LOG_TYPE_DEATH = "2";
+  /** 폐사(삭제) 시 */
+  public static final String LOG_TYPE_DEATH = "D";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

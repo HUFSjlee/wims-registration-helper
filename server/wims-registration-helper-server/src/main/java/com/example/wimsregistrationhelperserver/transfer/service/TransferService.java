@@ -5,6 +5,8 @@ import com.example.wimsregistrationhelperserver.auth.repository.UserRepository;
 import com.example.wimsregistrationhelperserver.common.exception.BadRequestException;
 import com.example.wimsregistrationhelperserver.common.exception.NotFoundException;
 import com.example.wimsregistrationhelperserver.common.exception.UnauthorizedException;
+import com.example.wimsregistrationhelperserver.species.domain.SpeciesStatusInfo;
+import com.example.wimsregistrationhelperserver.species.repository.SpeciesStatusInfoRepository;
 import com.example.wimsregistrationhelperserver.transfer.domain.TransferInfo;
 import com.example.wimsregistrationhelperserver.transfer.dto.CompleteTransferResponse;
 import com.example.wimsregistrationhelperserver.transfer.dto.CreateTransferRequest;
@@ -24,6 +26,7 @@ import java.util.UUID;
 public class TransferService {
   private final TransferInfoRepository transferInfoRepository;
   private final UserRepository userRepository;
+  private final SpeciesStatusInfoRepository speciesStatusInfoRepository;
 
   @Transactional
   public CreateTransferResponse createTransfer(Long loginUserId, CreateTransferRequest request) {
@@ -113,6 +116,9 @@ public class TransferService {
     TransferInfo transferInfo = transferInfoRepository.findByTransferKey(transferKey)
       .orElseThrow(() -> new NotFoundException("양도 요청을 찾을 수 없습니다."));
 
+    User transferor = userRepository.findById(transferInfo.getTransferorId())
+      .orElseThrow(() -> new NotFoundException("양도자 정보를 찾을 수 없습니다."));
+
     User transferee = userRepository.findById(transferInfo.getTransfereeId())
       .orElseThrow(() -> new NotFoundException("양수자 정보를 찾을 수 없습니다."));
 
@@ -123,6 +129,37 @@ public class TransferService {
     if (transferInfo.isCompleted()) {
       throw new BadRequestException("이미 완료된 양도 요청입니다.");
     }
+
+    Long transferorQuantity = speciesStatusInfoRepository.computeNetQuantityByUserIdAndSpeciesId(
+      transferor.getId(),
+      transferInfo.getSpeciesId()
+    );
+    long availableQuantity = transferorQuantity != null ? transferorQuantity : 0L;
+    if (availableQuantity < transferInfo.getSpeciesQuantity()) {
+      throw new BadRequestException("양도 가능한 보유 수량이 부족합니다.");
+    }
+
+    speciesStatusInfoRepository.save(
+      SpeciesStatusInfo.create(
+        transferor.getId(),
+        transferInfo.getSpeciesId(),
+        transferInfo.getScientificName(),
+        transferInfo.getCommonName(),
+        transferInfo.getSpeciesQuantity(),
+        SpeciesStatusInfo.LOG_TYPE_TRANSFER_OUT
+      )
+    );
+
+    speciesStatusInfoRepository.save(
+      SpeciesStatusInfo.create(
+        transferee.getId(),
+        transferInfo.getSpeciesId(),
+        transferInfo.getScientificName(),
+        transferInfo.getCommonName(),
+        transferInfo.getSpeciesQuantity(),
+        SpeciesStatusInfo.LOG_TYPE_TRANSFER_IN
+      )
+    );
 
     transferInfo.completeBy(loginUserId);
 

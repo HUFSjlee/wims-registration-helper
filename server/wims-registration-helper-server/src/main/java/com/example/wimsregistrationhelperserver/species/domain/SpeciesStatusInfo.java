@@ -11,20 +11,16 @@ import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
 
-/**
- * {@code species_status_info} 테이블 매핑 엔티티입니다. (등록/양도 등 상태 로그)
- */
 @Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "species_status_info")
 public class SpeciesStatusInfo {
 
-  /** 등록 시 */
   public static final String LOG_TYPE_REGISTER = "R";
-
-  /** 폐사(삭제) 시 */
   public static final String LOG_TYPE_DEATH = "D";
+  public static final String LOG_TYPE_TRANSFER_IN = "TR";
+  public static final String LOG_TYPE_TRANSFER_OUT = "TD";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

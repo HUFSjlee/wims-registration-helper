@@ -1,19 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { WebPage, Card, Input, Button } from "./WebScaffold";
 import { useMockAuth } from "../../contexts/MockAuthContext";
 
-export default function WebLoginPage() {
+type Props = {
+  nextPath?: string;
+};
+
+export default function WebLoginPage({ nextPath = "/web/main" }: Props) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { login } = useMockAuth();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const nextPath = searchParams.get("next") || "/web/main";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

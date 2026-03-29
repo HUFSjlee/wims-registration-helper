@@ -1,12 +1,14 @@
-"use client";
-
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { WebPage, Card, Button } from "../../../components/web/WebScaffold";
 
-export default function SignupTypePage() {
-  const searchParams = useSearchParams();
-  const nextPath = searchParams.get("next") || "/web/main";
+type PageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function SignupTypePage({ searchParams }: PageProps) {
+  const resolvedSearchParams = await searchParams;
+  const nextParam = resolvedSearchParams?.next;
+  const nextPath = (Array.isArray(nextParam) ? nextParam[0] : nextParam) || "/web/main";
   const nextQuery = `next=${encodeURIComponent(nextPath)}`;
 
   return (

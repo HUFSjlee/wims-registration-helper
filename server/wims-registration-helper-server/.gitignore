@@ -1,6 +1,9 @@
 HELP.md
 # Sensitive planning/docs
-docs/
+docs/*
+!docs/server-docs/
+docs/server-docs/*
+!docs/server-docs/server-guide.md
 server-docs-prd.md
 docs/server-docs/prd.md
 docs/*-prd.md

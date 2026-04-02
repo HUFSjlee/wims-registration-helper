@@ -170,7 +170,6 @@ Copy-Item `
 ## 문서
 
 - 서버 상세 문서: [server-guide.md](C:\Users\user\Coding-related%20Set\wims-registration-helper\server\wims-registration-helper-server\docs\server-docs\server-guide.md)
-- 세션 맥락 메모: [context-window-first.md](C:\Users\user\Coding-related%20Set\wims-registration-helper\server\wims-registration-helper-server\docs\server-docs\context-window-first.md)
 
 ## 향후 보완 항목
 

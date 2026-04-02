@@ -73,7 +73,7 @@ wims-registration-helper/
 
 현재 주요 서버 문서는 아래 파일에 정리되어 있습니다.
 
-- [server-guide.md](C:\Users\user\Coding-related%20Set\wims-registration-helper\server\wims-registration-helper-server\docs\server-docs\server-guide.md)
+- [`server/wims-registration-helper-server/docs/server-docs/server-guide.md`](server/wims-registration-helper-server/docs/server-docs/server-guide.md)
 
 ## 기술 스택
 
@@ -169,7 +169,7 @@ Copy-Item `
 
 ## 문서
 
-- 서버 상세 문서: [server-guide.md](C:\Users\user\Coding-related%20Set\wims-registration-helper\server\wims-registration-helper-server\docs\server-docs\server-guide.md)
+- 서버 상세 문서: [`server/wims-registration-helper-server/docs/server-docs/server-guide.md`](server/wims-registration-helper-server/docs/server-docs/server-guide.md)
 
 ## 향후 보완 항목
 
